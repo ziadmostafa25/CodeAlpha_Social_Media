@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponseForbidden
-from django.db.models import Q
 from django.utils.translation import gettext as _
 
 from .models import Conversation, Message, MessageReaction
@@ -14,9 +13,19 @@ from accounts.permissions import can_message_user, is_user_blocked
 from notifications.utils import create_notification
 
 
+def _conversation_access_allowed(conversation, user):
+    if not conversation.participants.filter(id=user.id).exists():
+        return False
+
+    other_user = conversation.get_other_participant(user)
+
+    return not (
+        other_user and is_user_blocked(user, other_user)
+    )
+
+
 @login_required
 def inbox_view(request):
-    """Inbox listing all conversations of the authenticated user."""
     conversations = request.user.conversations.prefetch_related(
         'participants', 'participants__profile', 'messages'
     ).order_by('-updated_at')
@@ -48,10 +57,6 @@ def inbox_view(request):
 
 @login_required
 def start_conversation_view(request, username):
-    """
-    Start or view conversation with another user.
-    GET requests NEVER create database records.
-    """
     other_user = get_object_or_404(User, username=username)
 
     if other_user == request.user:
@@ -93,34 +98,39 @@ def start_conversation_view(request, username):
         form = MessageForm(request.POST, request.FILES)
 
         if form.is_valid():
-            conversation, created = Conversation.get_or_create_direct(
-                request.user, other_user
-            )
+            if form.cleaned_data.get('reply_to'):
+                form.add_error(
+                    'reply_to',
+                    _("You cannot reply to a message in a new conversation.")
+                )
+            else:
+                conversation, created = Conversation.get_or_create_direct(
+                    request.user, other_user
+                )
 
-            msg = form.save(commit=False)
-            msg.conversation = conversation
-            msg.sender = request.user
-            msg.save()
+                msg = form.save(commit=False)
+                msg.conversation = conversation
+                msg.sender = request.user
+                msg.save()
 
-            conversation.save()
+                conversation.save()
 
-            create_notification(
-                actor=request.user,
-                recipient=other_user,
-                verb='message'
-            )
+                create_notification(
+                    actor=request.user,
+                    recipient=other_user,
+                    verb='message'
+                )
 
-            messages.success(request, _("Conversation started!"))
+                messages.success(request, _("Conversation started!"))
 
-            return redirect(
-                'chat:conversation',
-                conversation_id=conversation.id
-            )
+                return redirect(
+                    'chat:conversation',
+                    conversation_id=conversation.id
+                )
 
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, error)
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, error)
 
     else:
         form = MessageForm()
@@ -141,10 +151,6 @@ def start_conversation_view(request, username):
 
 @login_required
 def conversation_view(request, conversation_id):
-    """
-    View conversation thread and send messages.
-    Blocked users cannot access or send messages in an existing conversation.
-    """
     conversation = get_object_or_404(
         Conversation.objects.prefetch_related(
             'participants', 'participants__profile'
@@ -152,22 +158,15 @@ def conversation_view(request, conversation_id):
         id=conversation_id
     )
 
-    if request.user not in conversation.participants.all():
+    if not _conversation_access_allowed(conversation, request.user):
         return HttpResponseForbidden(
-            _("You are not a participant in this conversation.")
+            _("You cannot access this conversation.")
         )
 
     other_user = conversation.get_other_participant(request.user)
 
-    # Block protection
-    if other_user and is_user_blocked(request.user, other_user):
-        return HttpResponseForbidden(
-            _("You cannot access this conversation because messaging is restricted.")
-        )
-
     if request.method == 'POST':
-        # Recheck before sending a message
-        if other_user and is_user_blocked(request.user, other_user):
+        if not _conversation_access_allowed(conversation, request.user):
             return HttpResponseForbidden(
                 _("You cannot send messages to this user.")
             )
@@ -175,43 +174,50 @@ def conversation_view(request, conversation_id):
         form = MessageForm(request.POST, request.FILES)
 
         if form.is_valid():
-            msg = form.save(commit=False)
-            msg.conversation = conversation
-            msg.sender = request.user
-            msg.save()
+            reply_to = form.cleaned_data.get('reply_to')
 
-            conversation.save()
+            if reply_to and reply_to.conversation_id != conversation.id:
+                form.add_error(
+                    'reply_to',
+                    _("You can only reply to messages in this conversation.")
+                )
+            else:
+                msg = form.save(commit=False)
+                msg.conversation = conversation
+                msg.sender = request.user
+                msg.save()
 
-            if other_user:
-                create_notification(
-                    actor=request.user,
-                    recipient=other_user,
-                    verb='message'
+                conversation.save()
+
+                if other_user:
+                    create_notification(
+                        actor=request.user,
+                        recipient=other_user,
+                        verb='message'
+                    )
+
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'status': 'ok',
+                        'message_id': msg.id,
+                        'content': msg.content,
+                        'attachment_url': msg.attachment.url if msg.attachment else None,
+                        'audio_url': msg.audio_file.url if msg.audio_file else None,
+                        'audio_duration': msg.audio_duration,
+                        'sender_username': msg.sender.username,
+                        'created_at': _("Just now"),
+                    })
+
+                return redirect(
+                    'chat:conversation',
+                    conversation_id=conversation.id
                 )
 
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'status': 'ok',
-                    'message_id': msg.id,
-                    'content': msg.content,
-                    'attachment_url': msg.attachment.url if msg.attachment else None,
-                    'audio_url': msg.audio_file.url if msg.audio_file else None,
-                    'audio_duration': msg.audio_duration,
-                    'sender_username': msg.sender.username,
-                    'created_at': _("Just now"),
-                })
-
-            return redirect(
-                'chat:conversation',
-                conversation_id=conversation.id
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse(
+                {'status': 'error', 'errors': form.errors},
+                status=400
             )
-
-        else:
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse(
-                    {'status': 'error', 'errors': form.errors},
-                    status=400
-                )
 
     else:
         form = MessageForm()
@@ -244,7 +250,6 @@ def conversation_view(request, conversation_id):
 
 @login_required
 def mark_conversation_read_view(request, conversation_id):
-    """Explicit authenticated POST endpoint to mark messages as read."""
     if request.method != 'POST':
         return HttpResponseForbidden(
             _("Only POST is permitted for state change.")
@@ -255,9 +260,9 @@ def mark_conversation_read_view(request, conversation_id):
         id=conversation_id
     )
 
-    if request.user not in conversation.participants.all():
+    if not _conversation_access_allowed(conversation, request.user):
         return HttpResponseForbidden(
-            _("You are not a participant in this conversation.")
+            _("You are not allowed to access this conversation.")
         )
 
     updated_count = conversation.messages.filter(
@@ -272,15 +277,17 @@ def mark_conversation_read_view(request, conversation_id):
 
 @login_required
 def poll_messages_view(request, conversation_id):
-    """Poll for new messages without modifying read status."""
+    if request.method != 'GET':
+        return HttpResponseForbidden(_("Only GET is permitted."))
+
     conversation = get_object_or_404(
         Conversation,
         id=conversation_id
     )
 
-    if request.user not in conversation.participants.all():
+    if not _conversation_access_allowed(conversation, request.user):
         return HttpResponseForbidden(
-            _("You are not a participant in this conversation.")
+            _("You are not allowed to access this conversation.")
         )
 
     try:
@@ -288,11 +295,13 @@ def poll_messages_view(request, conversation_id):
     except (ValueError, TypeError):
         last_id = 0
 
+    last_id = max(last_id, 0)
+
     new_msgs = conversation.messages.filter(
         id__gt=last_id
     ).select_related(
         'sender', 'sender__profile', 'reply_to'
-    ).order_by('created_at')
+    ).order_by('created_at')[:100]
 
     data = []
 
@@ -317,16 +326,21 @@ def poll_messages_view(request, conversation_id):
 
 @login_required
 def message_react_view(request, message_id):
-    """Toggle emoji reaction on a message. Requires POST."""
     if request.method != 'POST':
         return HttpResponseForbidden(_("Only POST allowed."))
 
     msg = get_object_or_404(Message, id=message_id)
 
-    if request.user not in msg.conversation.participants.all():
+    if not _conversation_access_allowed(msg.conversation, request.user):
         return HttpResponseForbidden(_("Not authorized."))
 
-    emoji = request.POST.get('emoji', '❤️')
+    emoji = request.POST.get('emoji', '❤️').strip()
+
+    if not emoji or len(emoji) > 16:
+        return JsonResponse(
+            {'status': 'error', 'message': _('Invalid reaction.')},
+            status=400
+        )
 
     reaction_qs = MessageReaction.objects.filter(
         message=msg,
@@ -355,7 +369,6 @@ def message_react_view(request, message_id):
 
 @login_required
 def delete_message_view(request, message_id):
-    """Delete a user's own message. Requires POST."""
     if request.method != 'POST':
         return HttpResponseForbidden(_("Only POST allowed."))
 
