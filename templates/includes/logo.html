@@ -1,0 +1,94 @@
+{% load i18n %}
+{% get_current_language as CURRENT_LANG %}
+<div class="nivo-brand-lockup {% if logo_class %}{{ logo_class }}{% endif %}">
+  <!-- Exact NIVO N-Shaped Ribbon Vector Symbol (Signature Lime #C8F31D + Deep Purple #302052) -->
+  <svg class="nivo-brand-symbol" viewBox="0 0 106 94" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="NIVO Logo">
+    <defs>
+      <!-- Left Stem Gradient: Deep Purple (#302052) at bottom to Signature Lime (#C8F31D) at top curve -->
+      <linearGradient id="nivoGradLeft_{{ logo_id|default:'main' }}" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#302052" />
+        <stop offset="35%" stop-color="#4C2882" />
+        <stop offset="65%" stop-color="#7545F5" />
+        <stop offset="85%" stop-color="#AEE620" />
+        <stop offset="100%" stop-color="#C8F31D" />
+      </linearGradient>
+
+      <!-- Diagonal Ribbon Gradient: Signature Lime (#C8F31D) at top-left to Deep Purple (#302052) at bottom-right -->
+      <linearGradient id="nivoGradDiag_{{ logo_id|default:'main' }}" x1="12%" y1="0%" x2="88%" y2="100%">
+        <stop offset="0%" stop-color="#C8F31D" />
+        <stop offset="22%" stop-color="#D4F726" />
+        <stop offset="55%" stop-color="#7545F5" />
+        <stop offset="82%" stop-color="#4C2882" />
+        <stop offset="100%" stop-color="#302052" />
+      </linearGradient>
+
+      <!-- Right Stem Gradient: Transition to Deep Royal Purple at top cap -->
+      <linearGradient id="nivoGradRight_{{ logo_id|default:'main' }}" x1="0%" y1="100%" x2="0%" y2="0%">
+        <stop offset="0%" stop-color="#7545F5" />
+        <stop offset="45%" stop-color="#4C2882" />
+        <stop offset="100%" stop-color="#302052" />
+      </linearGradient>
+
+      <!-- Smooth Drop Shadow under the top-left fold -->
+      <linearGradient id="nivoFoldShadowGrad_{{ logo_id|default:'main' }}" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#171A18" stop-opacity="0.55" />
+        <stop offset="100%" stop-color="#171A18" stop-opacity="0" />
+      </linearGradient>
+
+      <!-- Ambient Drop Shadow Filter for Ribbon Depth -->
+      <filter id="nivoDiagShadow_{{ logo_id|default:'main' }}" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="-2" dy="3" stdDeviation="2.5" flood-color="#171A18" flood-opacity="0.45" />
+      </filter>
+    </defs>
+
+    <!-- 1. Left Stem with Semicircular Bottom-Left Cap -->
+    <path d="M 4 72 
+             C 4 82 12 90 22 90 
+             C 32 90 38 82 38 72 
+             L 38 32 
+             C 38 20 28 6 18 8 
+             C 10 10 4 18 4 30 
+             Z" 
+          fill="url(#nivoGradLeft_{{ logo_id|default:'main' }})" />
+
+    <!-- Soft Depth Shadow on Left Pillar beneath Diagonal Fold -->
+    <path d="M 4 32 C 12 36 24 40 38 38 L 38 52 C 24 54 12 48 4 42 Z" 
+          fill="url(#nivoFoldShadowGrad_{{ logo_id|default:'main' }})" />
+
+    <!-- 2. Right Stem with Semicircular Top-Right Cap -->
+    <path d="M 68 86 
+             L 68 18 
+             C 68 8 76 2 86 2 
+             C 96 2 102 8 102 18 
+             L 102 62 
+             C 102 78 92 88 78 88 
+             C 74 88 70 87 68 86 
+             Z" 
+          fill="url(#nivoGradRight_{{ logo_id|default:'main' }})" />
+
+    <!-- 3. Foreground Continuous Diagonal Ribbon with Top-Left Fold Curve -->
+    <path d="M 4 28 
+             C 4 12 16 4 28 4 
+             C 36 4 46 8 52 16 
+             L 86 64 
+             C 94 74 88 88 76 88 
+             C 68 88 60 82 54 74 
+             L 18 24 
+             C 14 18 8 20 4 28 
+             Z" 
+          fill="url(#nivoGradDiag_{{ logo_id|default:'main' }})" 
+          filter="url(#nivoDiagShadow_{{ logo_id|default:'main' }})" />
+  </svg>
+
+  {% if not symbol_only %}
+    <!-- NIVO Wordmark & Tagline -->
+    <div class="nivo-wordmark-wrapper">
+      <span class="nivo-wordmark">NIVO</span>
+      {% if show_tagline %}
+        <span class="nivo-tagline">
+          {% if CURRENT_LANG == 'ar' %}عالمك، بتواصل يجمعنا.{% else %}Your World, In Sync.{% endif %}
+        </span>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>

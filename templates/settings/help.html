@@ -1,0 +1,63 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Help & Community Guidelines" %}{% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Help & About NIVO" %}</h1>
+<p class="settings-panel-desc">{% trans "Learn about our platform, community standards, and how to get the most out of NIVO." %}</p>
+
+<!-- About Card -->
+<div class="card" style="margin-bottom: 2rem; border-color: var(--nivo-lime);">
+  <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+    {% include 'includes/logo.html' with show_tagline=False %}
+    <div>
+      <h2 style="font-size: 1.15rem; font-weight: 800; margin: 0;">NIVO Platform v2.0</h2>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">CodeAlpha Full Stack Internship — Task 2</p>
+    </div>
+  </div>
+  <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary); margin-bottom: 0.75rem;">
+    <strong>NIVO</strong> {% trans "is a modern, high-performance social networking platform built with Python, Django, PostgreSQL/SQLite, and Vanilla JavaScript. Engineered for fluid social connectivity, interactive media feeds, short-form video reels, direct messaging, and rich customization." %}
+  </p>
+  <div style="display: flex; gap: 1rem; font-size: 0.85rem; font-weight: 700;">
+    <span style="color: var(--nivo-lime);">EN: "Your World, In Sync."</span>
+    <span style="color: var(--nivo-purple); font-family: var(--font-arabic);">AR: "عالمك، بتواصل يجمعنا."</span>
+  </div>
+</div>
+
+<!-- Community Standards -->
+<div style="margin-bottom: 2rem;">
+  <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.75rem;">{% trans "Community Guidelines" %}</h2>
+  <ul style="list-style: disc; padding-inline-start: 1.5rem; line-height: 1.8; font-size: 0.9rem; color: var(--text-secondary);">
+    <li><strong>{% trans "Respect & Authentic Identity:" %}</strong> {% trans "Engage respectfully with fellow creators and community members. Impersonation, hate speech, and harassment are strictly prohibited." %}</li>
+    <li><strong>{% trans "Original Media:" %}</strong> {% trans "Share stories, photos, and video reels that you own or have rights to publish." %}</li>
+    <li><strong>{% trans "Safe & Constructive Discussions:" %}</strong> {% trans "Keep discussions productive. Posts or comments violating terms can be reported directly by any member for swift moderation." %}</li>
+  </ul>
+</div>
+
+<!-- Frequently Asked Questions -->
+<div>
+  <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">{% trans "Frequently Asked Questions" %}</h2>
+  
+  <div style="margin-bottom: 1rem; background: var(--bg-hover); padding: 1rem 1.25rem; border-radius: var(--radius-md);">
+    <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;">{% trans "How do Reels work?" %}</h3>
+    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+      {% trans "Reels are vertical short videos (up to 50MB, MP4/WebM). You can like, comment, and share reels, as well as specify background sound titles." %}
+    </p>
+  </div>
+
+  <div style="margin-bottom: 1rem; background: var(--bg-hover); padding: 1rem 1.25rem; border-radius: var(--radius-md);">
+    <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;">{% trans "How does account privacy protect me?" %}</h3>
+    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+      {% trans "Enabling Private Account hides your posts and reels from public explore feeds and search. Only approved followers can view your content." %}
+    </p>
+  </div>
+
+  <div style="background: var(--bg-hover); padding: 1rem 1.25rem; border-radius: var(--radius-md);">
+    <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;">{% trans "What is the Calling status in Messages?" %}</h3>
+    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+      {% trans "Direct messaging includes a real-time WebRTC audio/video call control interface. Device audio/video streams are initialized locally via modern browser WebRTC APIs." %}
+    </p>
+  </div>
+</div>
+{% endblock %}

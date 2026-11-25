@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{{ title }} — @{{ profile_user.username }} — NIVO{% endblock %}
+
+{% block content %}
+<main class="main-wrapper single-column">
+  
+  <div style="margin-bottom: 1rem;">
+    <a href="{% url 'accounts:profile' username=profile_user.username %}" class="btn btn-secondary btn-sm">
+      &larr; {% trans "Back to Profile" %}
+    </a>
+  </div>
+
+  <div class="card" style="padding: 1.5rem;">
+    <h1 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 1.25rem;">
+      {{ title }} ({{ users_list|length }})
+    </h1>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      {% for u in users_list %}
+        <div class="suggested-user-item" style="padding: 0.75rem; background-color: var(--bg-input); border-radius: var(--radius-md);">
+          <div class="user-item-info">
+            <a href="{% url 'accounts:profile' username=u.username %}">
+              {% if u.profile.get_avatar_url %}
+                <img src="{{ u.profile.get_avatar_url }}" alt="{{ u.username }}" style="width: 44px; height: 44px; border-radius: var(--radius-full); object-fit: cover;">
+              {% else %}
+                <div style="width: 44px; height: 44px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--accent-gradient); color: white;">
+                  {{ u.username|first|upper }}
+                </div>
+              {% endif %}
+            </a>
+            <div class="user-item-names">
+              <a href="{% url 'accounts:profile' username=u.username %}" class="user-item-display">
+                {{ u.profile.get_display_name }}
+              </a>
+              <span class="user-item-username">@{{ u.username }}</span>
+              {% if u.profile.bio %}
+                <span style="font-size: 0.775rem; color: var(--text-secondary); margin-top: 2px;">{{ u.profile.bio|truncatechars:60 }}</span>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if user.is_authenticated and u != user %}
+            <button type="button" class="btn btn-primary btn-sm follow-toggle-btn" data-username="{{ u.username }}">
+              {% trans "Follow" %}
+            </button>
+          {% endif %}
+        </div>
+      {% empty %}
+        <div class="empty-state">
+          <p class="empty-text">{% trans "No users in this list yet." %}</p>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+
+</main>
+{% endblock %}

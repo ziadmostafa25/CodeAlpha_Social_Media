@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Edit Profile" %} — NIVO{% endblock %}
+
+{% block content %}
+<main class="main-wrapper single-column">
+  <div class="card" style="padding: 2.25rem;">
+    
+    <div style="margin-bottom: 1.5rem;">
+      <h1 style="font-size: 1.4rem; font-weight: 800;">{% trans "Edit Your Profile" %}</h1>
+      <p style="color: var(--text-muted); font-size: 0.885rem;">{% trans "Update your avatar, bio, and personal details." %}</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Current Avatar Preview & File Input -->
+      <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-color);">
+        {% if user.profile.get_avatar_url %}
+          <img src="{{ user.profile.get_avatar_url }}" alt="{{ user.username }}" id="avatar-preview" style="width: 72px; height: 72px; border-radius: var(--radius-full); object-fit: cover;">
+        {% else %}
+          <div id="avatar-preview-fallback" style="width: 72px; height: 72px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.75rem; background: var(--accent-gradient); color: white;">
+            {{ user.username|first|upper }}
+          </div>
+        {% endif %}
+
+        <div style="flex: 1;">
+          <label class="form-label">{% trans "Profile Photo" %}</label>
+          {{ form.avatar }}
+          {% if form.avatar.errors %}
+            <div class="form-error">{{ form.avatar.errors }}</div>
+          {% endif %}
+          <div class="form-help-text">{% trans "Recommended: Square JPG or PNG, max 5MB." %}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Display Name" %}</label>
+        {{ form.display_name }}
+        {% if form.display_name.errors %}
+          <div class="form-error">{{ form.display_name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Bio" %}</label>
+        {{ form.bio }}
+        {% if form.bio.errors %}
+          <div class="form-error">{{ form.bio.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Location" %}</label>
+        {{ form.location }}
+        {% if form.location.errors %}
+          <div class="form-error">{{ form.location.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Website" %}</label>
+        {{ form.website }}
+        {% if form.website.errors %}
+          <div class="form-error">{{ form.website.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem;">
+        <a href="{% url 'accounts:profile' username=user.username %}" class="btn btn-secondary">
+          {% trans "Cancel" %}
+        </a>
+        <button type="submit" class="btn btn-primary">
+          {% trans "Save Profile" %}
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</main>
+{% endblock %}

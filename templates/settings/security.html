@@ -1,0 +1,57 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Password & Security" %}{% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Password & Security" %}</h1>
+<p class="settings-panel-desc">{% trans "Manage your account authentication credentials and safeguard your access." %}</p>
+
+<form method="post" action="{% url 'settings:security' %}" style="max-width: 480px;">
+  {% csrf_token %}
+
+  <div class="settings-form-row">
+    <label for="id_old_password">{% trans "Current Password" %}</label>
+    <input type="password" name="old_password" id="id_old_password" class="search-input" style="width: 100%;" required>
+    {% if form.old_password.errors %}
+      <div style="color: var(--accent-danger); font-size: 0.8rem; margin-top: 0.35rem;">
+        {{ form.old_password.errors.0 }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="settings-form-row">
+    <label for="id_new_password1">{% trans "New Password" %}</label>
+    <input type="password" name="new_password1" id="id_new_password1" class="search-input" style="width: 100%;" required>
+    {% if form.new_password1.errors %}
+      <div style="color: var(--accent-danger); font-size: 0.8rem; margin-top: 0.35rem;">
+        {{ form.new_password1.errors.0 }}
+      </div>
+    {% endif %}
+    <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">
+      {% trans "Minimum 6 characters. Must not be too common or entirely numeric." %}
+    </span>
+  </div>
+
+  <div class="settings-form-row">
+    <label for="id_new_password2">{% trans "Confirm New Password" %}</label>
+    <input type="password" name="new_password2" id="id_new_password2" class="search-input" style="width: 100%;" required>
+    {% if form.new_password2.errors %}
+      <div style="color: var(--accent-danger); font-size: 0.8rem; margin-top: 0.35rem;">
+        {{ form.new_password2.errors.0 }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <button type="submit" class="btn btn-primary">
+      {% trans "Update Password" %}
+    </button>
+  </div>
+</form>
+
+<div style="margin-top: 2.5rem; background: var(--bg-hover); border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid var(--border-color); font-size: 0.825rem; color: var(--text-secondary);">
+  <strong style="color: var(--text-primary); display: block; margin-bottom: 0.25rem;">{% trans "Active Sessions Protection:" %}</strong>
+  {% trans "When you change your password, Django automatically updates your active session token so you stay logged in securely on this device." %}
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Delete Post" %} — NIVO{% endblock %}
+
+{% block content %}
+<main class="main-wrapper single-column">
+  <div class="card" style="padding: 2.25rem; text-align: center;">
+    <div style="width: 56px; height: 56px; border-radius: var(--radius-full); background: rgba(239, 68, 68, 0.12); color: var(--accent-danger); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+      </svg>
+    </div>
+
+    <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;">{% trans "Delete this post?" %}</h2>
+    <p style="color: var(--text-secondary); max-width: 420px; margin: 0 auto 1.5rem; font-size: 0.95rem;">
+      {% trans "This action is permanent and cannot be undone. All comments and likes associated with this post will also be deleted." %}
+    </p>
+
+    {% if post.content %}
+      <div style="background-color: var(--bg-input); padding: 1rem; border-radius: var(--radius-md); font-style: italic; margin-bottom: 1.75rem; text-align: start;">
+        "{{ post.content|truncatechars:120 }}"
+      </div>
+    {% endif %}
+
+    <form method="post" style="display: flex; gap: 0.75rem; justify-content: center;">
+      {% csrf_token %}
+      <a href="{% url 'posts:feed' %}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+      <button type="submit" class="btn btn-danger">{% trans "Yes, Delete Permanently" %}</button>
+    </form>
+  </div>
+</main>
+{% endblock %}

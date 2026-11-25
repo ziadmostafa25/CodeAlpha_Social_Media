@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Report Post" %} — NIVO{% endblock %}
+
+{% block content %}
+<div style="max-width: 520px; margin: 2.5rem auto; padding: 0 1rem;">
+  
+  <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+    <a href="{% url 'posts:post_detail' post_id=post.id %}" class="btn btn-secondary btn-sm" aria-label="{% trans 'Back' %}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </a>
+    <h1 style="font-size: 1.35rem; font-weight: 800; margin: 0; color: var(--accent-danger);">
+      {% trans "Report Content" %}
+    </h1>
+  </div>
+
+  <div class="card" style="padding: 2rem;">
+    
+    <!-- Post Snippet Being Reported -->
+    <div style="background: var(--bg-hover); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 700;">
+        <span>@{{ post.author.username }}</span>
+        <span style="color: var(--text-muted); font-weight: 400;">• {{ post.created_at|timesince }} {% trans "ago" %}</span>
+      </div>
+      <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary);">
+        {{ post.content|truncatechars:120 }}
+      </p>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="settings-form-row">
+        <label for="id_reason" style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">
+          {% trans "Why are you reporting this post?" %} <span style="color: var(--accent-danger);">*</span>
+        </label>
+        <select name="reason" id="id_reason" class="search-input" style="width: 100%; cursor: pointer;" required>
+          <option value="" disabled selected>{% trans "Select a reason..." %}</option>
+          <option value="spam">{% trans "Spam, scam, or commercial bot activity" %}</option>
+          <option value="harassment">{% trans "Harassment, hate speech, or bullying" %}</option>
+          <option value="inappropriate">{% trans "Nudity, sexual, or sensitive content" %}</option>
+          <option value="violence">{% trans "Violence, self-harm, or dangerous threats" %}</option>
+          <option value="copyright">{% trans "Intellectual property or copyright infringement" %}</option>
+          <option value="other">{% trans "Other community policy violation" %}</option>
+        </select>
+        {% if form.reason.errors %}
+          <div style="color: var(--accent-danger); font-size: 0.8rem; margin-top: 0.35rem;">
+            {{ form.reason.errors.0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="settings-form-row">
+        <label for="id_details" style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.5rem;">
+          {% trans "Additional details (optional):" %}
+        </label>
+        <textarea name="details" id="id_details" rows="3" class="search-input" style="width: 100%; border-radius: var(--radius-md); resize: vertical;" placeholder="{% trans 'Provide any additional context for our moderation team...' %}"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 1.75rem;">
+        <button type="submit" class="btn btn-danger" style="flex: 1;">
+          {% trans "Submit Report" %}
+        </button>
+        <a href="{% url 'posts:post_detail' post_id=post.id %}" class="btn btn-outline" style="flex: 1; text-align: center;">
+          {% trans "Cancel" %}
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

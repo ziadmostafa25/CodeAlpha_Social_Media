@@ -1,0 +1,54 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Language" %} (اللغة){% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Language Preferences" %}</h1>
+<p class="settings-panel-desc">{% trans "Select your preferred application language. NIVO includes full bidirectional layout support for English (LTR) and Arabic (RTL)." %}</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+  
+  <!-- English Option -->
+  <form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{% url 'settings:language' %}">
+    <input type="hidden" name="language" value="en">
+    <button type="submit" class="card" style="width: 100%; text-align: left; cursor: pointer; padding: 1.5rem; border-width: 2px; {% if LANGUAGE_CODE == 'en' %}border-color: var(--accent-primary); background: var(--accent-light);{% endif %}">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary);">English</span>
+        {% if LANGUAGE_CODE == 'en' %}
+          <span style="color: var(--accent-primary); font-weight: 800; font-size: 0.8rem;">[ACTIVE]</span>
+        {% endif %}
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">
+        "Your World, In Sync."
+      </p>
+    </button>
+  </form>
+
+  <!-- Arabic Option -->
+  <form action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{% url 'settings:language' %}">
+    <input type="hidden" name="language" value="ar">
+    <button type="submit" class="card" style="width: 100%; text-align: right; cursor: pointer; padding: 1.5rem; border-width: 2px; {% if LANGUAGE_CODE == 'ar' %}border-color: var(--accent-primary); background: var(--accent-light);{% endif %}">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        {% if LANGUAGE_CODE == 'ar' %}
+          <span style="color: var(--accent-primary); font-weight: 800; font-size: 0.8rem;">[مفعّل]</span>
+        {% endif %}
+        <span style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-arabic);">العربية</span>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0; font-family: var(--font-arabic);">
+        "عالمك، بتواصل يجمعنا."
+      </p>
+    </button>
+  </form>
+
+</div>
+
+<div style="background: var(--bg-hover); border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid var(--border-color); font-size: 0.85rem; color: var(--text-secondary);">
+  <strong style="color: var(--text-primary); display: block; margin-bottom: 0.25rem;">{% trans "Bidirectional Rendering:" %}</strong>
+  {% trans "Choosing Arabic activates right-to-left layout alignment across navigation bars, post threads, direct chat bubbles, and settings menus." %}
+</div>
+{% endblock %}

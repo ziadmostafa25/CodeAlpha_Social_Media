@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Log In" %} — NIVO{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card auth-card">
+    
+    <div class="auth-header">
+      <div class="auth-logo">
+        {% include 'includes/logo.html' with logo_class='logo-large' show_tagline=True %}
+      </div>
+      <h1 class="auth-title">{% trans "Welcome Back" %}</h1>
+      <p class="auth-subtitle">{% trans "Enter your credentials to access your NIVO feed." %}</p>
+    </div>
+
+    <form method="post" action="{% url 'accounts:login' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.username.id_for_label }}">{% trans "Username" %}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <div class="form-error">{{ form.username.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.password.id_for_label }}">{% trans "Password" %}</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+          <div class="form-error">{{ form.password.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.25rem;">
+        {% trans "Sign In" %}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>{% trans "Don't have an account?" %} <a href="{% url 'accounts:register' %}">{% trans "Create one now" %}</a></p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

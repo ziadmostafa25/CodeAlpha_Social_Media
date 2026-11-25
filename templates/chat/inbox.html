@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Messages" %} — NIVO{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+  
+  <!-- Sidebar Conversation List -->
+  <aside class="chat-sidebar" style="width: 100%; border-inline-end: 1px solid var(--border-color);">
+    <div class="chat-sidebar-header">
+      <h2>{% trans "Messages" %}</h2>
+      {% if unread_messages_count > 0 %}
+        <span class="badge-count" style="position: static;">{{ unread_messages_count }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Suggested Quick People Bar -->
+    {% if following_users %}
+      <div style="padding: 0.85rem 1rem; border-bottom: 1px solid var(--border-color); overflow-x: auto; display: flex; gap: 0.85rem; scrollbar-width: none;">
+        {% for u in following_users %}
+          <a href="{% url 'chat:start_conversation' username=u.username %}" title="{% trans 'Message' %} @{{ u.username }}" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; min-width: 52px;">
+            {% if u.profile.get_avatar_url %}
+              <img src="{{ u.profile.get_avatar_url }}" alt="{{ u.username }}" class="avatar-thumb" style="width: 44px; height: 44px;">
+            {% else %}
+              <div class="avatar-thumb avatar-initials" style="width: 44px; height: 44px;">{{ u.username|first|upper }}</div>
+            {% endif %}
+            <span style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52px;">
+              {{ u.username }}
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Conversation Threads List -->
+    <ul class="chat-conversations-list">
+      {% for conv in conversations %}
+        {% with other=conv.participants.all|first %}
+          {# Retrieve the actual other participant #}
+          {% for p in conv.participants.all %}
+            {% if p != user %}
+              <li>
+                <a href="{% url 'chat:conversation' conversation_id=conv.id %}" class="conversation-item-link">
+                  {% if p.profile.get_avatar_url %}
+                    <img src="{{ p.profile.get_avatar_url }}" alt="{{ p.username }}" class="avatar-thumb" style="width: 44px; height: 44px;">
+                  {% else %}
+                    <div class="avatar-thumb avatar-initials" style="width: 44px; height: 44px;">{{ p.username|first|upper }}</div>
+                  {% endif %}
+                  
+                  <div class="conversation-meta">
+                    <div class="conversation-meta-top">
+                      <span class="conversation-user-name">{{ p.profile.get_display_name }}</span>
+                      <span class="conversation-time">{{ conv.updated_at|timesince }}</span>
+                    </div>
+                    {% with last_msg=conv.get_last_message %}
+                      {% if last_msg %}
+                        <p class="conversation-snippet {% if not last_msg.is_read and last_msg.sender != user %}unread-bold{% endif %}">
+                          {% if last_msg.sender == user %}{% trans "You" %}: {% endif %}
+                          {{ last_msg.content|default:_("[Attachment]")|truncatechars:35 }}
+                        </p>
+                      {% else %}
+                        <p class="conversation-snippet" style="font-style: italic;">{% trans "Conversation started" %}</p>
+                      {% endif %}
+                    {% endwith %}
+                  </div>
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        {% endwith %}
+      {% empty %}
+        <li style="padding: 3rem 1.5rem; text-align: center; color: var(--text-muted);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 0.75rem; opacity: 0.6;">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+          <p style="font-weight: 600; margin-bottom: 0.25rem;">{% trans "Your inbox is empty" %}</p>
+          <p style="font-size: 0.8rem; margin: 0;">{% trans "Connect with creators to start direct messaging." %}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </aside>
+
+  <!-- Empty Detail Placeholder on Desktop -->
+  <main class="chat-main" style="display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+    <div style="max-width: 380px;">
+      <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--accent-light); color: var(--accent-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+      </div>
+      <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">{% trans "Your Direct Messages" %}</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        {% trans "Send private messages, media attachments, and stay in sync with friends and creators on NIVO." %}
+      </p>
+      <a href="{% url 'accounts:search' %}" class="btn btn-primary btn-sm">
+        {% trans "Find Friends to Message" %}
+      </a>
+    </div>
+  </main>
+
+</div>
+{% endblock %}

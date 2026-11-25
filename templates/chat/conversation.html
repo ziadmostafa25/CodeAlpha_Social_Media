@@ -1,0 +1,141 @@
+
+  // Append new message bubble safely (XSS protection)
+  function renderMessageBubble(msg) {
+    if (!container || document.getElementById('msg-' + msg.id)) return;
+
+    const row = document.createElement('div');
+    row.className = 'chat-message-row ' + (msg.is_me ? 'sent' : 'received');
+    row.id = 'msg-' + msg.id;
+    row.dataset.msgId = msg.id;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+
+    // Accept only safe HTTP/HTTPS media URLs
+    function getSafeMediaUrl(value) {
+      if (typeof value !== 'string' || !value.trim()) return null;
+
+      try {
+        const url = new URL(value, window.location.origin);
+
+        if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+          return null;
+        }
+
+        return url.href;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    // Image attachment
+    const attachmentUrl = getSafeMediaUrl(msg.attachment_url);
+
+    if (attachmentUrl) {
+      const wrapper = document.createElement('div');
+      wrapper.style.marginBottom = '0.5rem';
+
+      const img = document.createElement('img');
+      img.src = attachmentUrl;
+      img.alt = 'Attachment';
+      img.style.maxWidth = '240px';
+      img.style.borderRadius = '10px';
+      img.style.cursor = 'pointer';
+
+      img.addEventListener('click', () => {
+        window.open(img.src, '_blank', 'noopener,noreferrer');
+      });
+
+      wrapper.appendChild(img);
+      bubble.appendChild(wrapper);
+    }
+
+    // Voice message
+    const audioUrl = getSafeMediaUrl(msg.audio_url);
+
+    if (audioUrl) {
+      const player = document.createElement('div');
+      player.className = 'voice-message-player';
+      player.style.cssText =
+        'display:flex; align-items:center; gap:0.65rem; min-width:200px; padding:0.25rem 0;';
+
+      const playButton = document.createElement('button');
+      playButton.type = 'button';
+      playButton.className = 'voice-play-btn';
+      playButton.style.cssText =
+        'background:rgba(255,255,255,0.2); border:none; width:34px; height:34px; border-radius:50%; color:inherit; cursor:pointer; display:flex; align-items:center; justify-content:center;';
+
+      playButton.innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+
+      playButton.addEventListener('click', () => {
+        toggleVoiceAudio(playButton);
+      });
+
+      const audioWrapper = document.createElement('div');
+      audioWrapper.style.flex = '1';
+
+      const audio = document.createElement('audio');
+      audio.src = audioUrl;
+      audio.preload = 'metadata';
+
+      audio.addEventListener('timeupdate', () => {
+        updateAudioProgress(audio);
+      });
+
+      audio.addEventListener('ended', () => {
+        resetAudioPlayer(audio);
+      });
+
+      const progressTrack = document.createElement('div');
+      progressTrack.style.cssText =
+        'height:4px; background:rgba(255,255,255,0.3); border-radius:2px; overflow:hidden; margin-bottom:0.2rem;';
+
+      const progressBar = document.createElement('div');
+      progressBar.className = 'voice-progress-bar';
+      progressBar.style.cssText =
+        'height:100%; width:0%; background:var(--nivo-lime);';
+
+      progressTrack.appendChild(progressBar);
+
+      const duration = document.createElement('span');
+      duration.style.cssText = 'font-size:0.7rem; opacity:0.85;';
+      duration.textContent =
+        msg.audio_duration != null
+          ? `${msg.audio_duration}s`
+          : 'Voice message';
+
+      audioWrapper.appendChild(audio);
+      audioWrapper.appendChild(progressTrack);
+      audioWrapper.appendChild(duration);
+
+      player.appendChild(playButton);
+      player.appendChild(audioWrapper);
+
+      bubble.appendChild(player);
+    }
+
+    // Message text: textContent prevents HTML/script injection
+    if (msg.content) {
+      const content = document.createElement('div');
+      content.textContent = String(msg.content);
+      bubble.appendChild(content);
+    }
+
+    row.appendChild(bubble);
+
+    // Message timestamp
+    const metadata = document.createElement('div');
+    metadata.style.cssText =
+      'display:flex; align-items:center; gap:0.4rem;';
+
+    const time = document.createElement('span');
+    time.className = 'chat-bubble-time';
+    time.textContent = String(msg.created_at || '');
+
+    metadata.appendChild(time);
+    row.appendChild(metadata);
+
+    container.appendChild(row);
+    scrollToBottom();
+  }

@@ -1,0 +1,66 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Notification Preferences" %}{% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Notification Preferences" %}</h1>
+<p class="settings-panel-desc">{% trans "Choose which community interactions and updates trigger in-app notifications." %}</p>
+
+<form method="post" action="{% url 'settings:notifications' %}">
+  {% csrf_token %}
+
+  <div style="background: var(--bg-hover); border-radius: var(--radius-md); border: 1px solid var(--border-color); padding: 0.5rem 1.25rem; margin-bottom: 2rem;">
+    
+    <!-- Likes -->
+    <div class="settings-checkbox-row">
+      <input type="checkbox" name="notify_likes" id="id_notify_likes" style="width: 18px; height: 18px; accent-color: var(--nivo-lime); cursor: pointer;" {% if form.notify_likes.value %}checked{% endif %}>
+      <label for="id_notify_likes" style="margin: 0; cursor: pointer; flex: 1;">
+        <span style="font-weight: 700; display: block; font-size: 0.9rem;">{% trans "Likes & Reel Hearts" %}</span>
+        <span style="font-size: 0.775rem; color: var(--text-muted);">{% trans "When someone likes one of your posts or video reels" %}</span>
+      </label>
+    </div>
+
+    <!-- Comments -->
+    <div class="settings-checkbox-row">
+      <input type="checkbox" name="notify_comments" id="id_notify_comments" style="width: 18px; height: 18px; accent-color: var(--nivo-lime); cursor: pointer;" {% if form.notify_comments.value %}checked{% endif %}>
+      <label for="id_notify_comments" style="margin: 0; cursor: pointer; flex: 1;">
+        <span style="font-weight: 700; display: block; font-size: 0.9rem;">{% trans "Comments & Replies" %}</span>
+        <span style="font-size: 0.775rem; color: var(--text-muted);">{% trans "When someone joins the discussion on your posts or reels" %}</span>
+      </label>
+    </div>
+
+    <!-- Follows -->
+    <div class="settings-checkbox-row">
+      <input type="checkbox" name="notify_follows" id="id_notify_follows" style="width: 18px; height: 18px; accent-color: var(--nivo-lime); cursor: pointer;" {% if form.notify_follows.value %}checked{% endif %}>
+      <label for="id_notify_follows" style="margin: 0; cursor: pointer; flex: 1;">
+        <span style="font-weight: 700; display: block; font-size: 0.9rem;">{% trans "New Followers" %}</span>
+        <span style="font-size: 0.775rem; color: var(--text-muted);">{% trans "When someone starts following your profile" %}</span>
+      </label>
+    </div>
+
+    <!-- Messages -->
+    <div class="settings-checkbox-row">
+      <input type="checkbox" name="notify_messages" id="id_notify_messages" style="width: 18px; height: 18px; accent-color: var(--nivo-lime); cursor: pointer;" {% if form.notify_messages.value %}checked{% endif %}>
+      <label for="id_notify_messages" style="margin: 0; cursor: pointer; flex: 1;">
+        <span style="font-weight: 700; display: block; font-size: 0.9rem;">{% trans "Direct Messages" %}</span>
+        <span style="font-size: 0.775rem; color: var(--text-muted);">{% trans "When someone sends you a new private message" %}</span>
+      </label>
+    </div>
+
+    <!-- Reposts -->
+    <div class="settings-checkbox-row">
+      <input type="checkbox" name="notify_reposts" id="id_notify_reposts" style="width: 18px; height: 18px; accent-color: var(--nivo-lime); cursor: pointer;" {% if form.notify_reposts.value %}checked{% endif %}>
+      <label for="id_notify_reposts" style="margin: 0; cursor: pointer; flex: 1;">
+        <span style="font-weight: 700; display: block; font-size: 0.9rem;">{% trans "Reposts & Amplifications" %}</span>
+        <span style="font-size: 0.775rem; color: var(--text-muted);">{% trans "When someone reposts your story to their profile feed" %}</span>
+      </label>
+    </div>
+
+  </div>
+
+  <button type="submit" class="btn btn-primary">
+    {% trans "Save Notification Settings" %}
+  </button>
+</form>
+{% endblock %}

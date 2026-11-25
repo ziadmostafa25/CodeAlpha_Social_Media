@@ -1,0 +1,45 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Account Information" %}{% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Account Information" %}</h1>
+<p class="settings-panel-desc">{% trans "Update your unique username handle and primary contact email address." %}</p>
+
+<form method="post" action="{% url 'settings:account' %}">
+  {% csrf_token %}
+
+  <div class="settings-form-row">
+    <label for="id_username">{% trans "Username Handle" %}</label>
+    <div style="position: relative;">
+      <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 700;">@</span>
+      <input type="text" name="username" id="id_username" value="{{ form.username.value|default:user.username }}" class="search-input" style="padding-left: 2.2rem; width: 100%;" required>
+    </div>
+    {% if form.username.errors %}
+      <div style="color: var(--accent-danger); font-size: 0.8rem; margin-top: 0.35rem;">
+        {{ form.username.errors.0 }}
+      </div>
+    {% endif %}
+    <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 0.25rem;">
+      {% trans "Letters, numbers, and underscores only. Max 30 characters." %}
+    </span>
+  </div>
+
+  <div class="settings-form-row">
+    <label for="id_email">{% trans "Email Address" %}</label>
+    <input type="email" name="email" id="id_email" value="{{ form.email.value|default:user.email }}" class="search-input" style="width: 100%;" required>
+    {% if form.email.errors %}
+      <div style="color: var(--accent-danger); font-size: 0.8rem; margin-top: 0.35rem;">
+        {{ form.email.errors.0 }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div style="margin-top: 2rem;">
+    <button type="submit" class="btn btn-primary">
+      {% trans "Save Changes" %}
+    </button>
+  </div>
+</form>
+{% endblock %}

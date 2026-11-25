@@ -1,0 +1,52 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Privacy & Messaging" %}{% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Privacy & Messaging" %}</h1>
+<p class="settings-panel-desc">{% trans "Control who can view your posts, media reels, and send you direct messages." %}</p>
+
+<form method="post" action="{% url 'settings:privacy' %}">
+  {% csrf_token %}
+
+  <div class="settings-form-row" style="background: var(--bg-hover); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <label for="id_is_private" style="font-weight: 800; font-size: 0.95rem; margin-bottom: 0.25rem; cursor: pointer;">
+          {% trans "Private Account" %}
+        </label>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; max-width: 460px;">
+          {% trans "When your account is private, only people you approve can see your posts, reels, and followers list. Existing followers won't be affected." %}
+        </p>
+      </div>
+      <div>
+        <input type="checkbox" name="is_private" id="id_is_private" style="width: 20px; height: 20px; accent-color: var(--nivo-lime); cursor: pointer;" {% if form.is_private.value %}checked{% endif %}>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-form-row">
+    <label for="id_allow_messages_from" style="font-size: 0.95rem; font-weight: 800; margin-bottom: 0.5rem;">
+      {% trans "Who Can Send You Direct Messages?" %}
+    </label>
+    <select name="allow_messages_from" id="id_allow_messages_from" class="search-input" style="width: 100%; cursor: pointer;">
+      <option value="everyone" {% if form.allow_messages_from.value == 'everyone' %}selected{% endif %}>
+        {% trans "Everyone (Open DMs)" %}
+      </option>
+      <option value="followers" {% if form.allow_messages_from.value == 'followers' %}selected{% endif %}>
+        {% trans "People You Follow or Followers Only" %}
+      </option>
+      <option value="none" {% if form.allow_messages_from.value == 'none' %}selected{% endif %}>
+        {% trans "No One (Disable Direct Messages)" %}
+      </option>
+    </select>
+  </div>
+
+  <div style="margin-top: 2.5rem;">
+    <button type="submit" class="btn btn-primary">
+      {% trans "Save Privacy Preferences" %}
+    </button>
+  </div>
+</form>
+{% endblock %}

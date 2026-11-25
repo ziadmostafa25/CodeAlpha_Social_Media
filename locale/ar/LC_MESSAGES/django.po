@@ -1,0 +1,905 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NIVO 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-10 15:00+0200\n"
+"PO-Revision-Date: 2026-11-10 15:00+0200\n"
+"Last-Translator: NIVO Localization Team\n"
+"Language-Team: Arabic <ar@nivo.local>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+msgid "Feed"
+msgstr "الخلاصة"
+
+msgid "Search creators and friends..."
+msgstr "ابحث عن المبدعين والأصدقاء..."
+
+msgid "Toggle Dark/Light theme"
+msgstr "تبديل المظهر الداكن / الفاتح"
+
+msgid "Toggle theme"
+msgstr "تبديل المظهر"
+
+msgid "Notifications"
+msgstr "الإشعارات"
+
+msgid "Log Out"
+msgstr "تسجيل الخروج"
+
+msgid "Log In"
+msgstr "تسجيل الدخول"
+
+msgid "Join NIVO"
+msgstr "انضم إلى نيفو"
+
+msgid "Close"
+msgstr "إغلاق"
+
+msgid "Search"
+msgstr "بحث"
+
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+msgid "What's on your mind? Share your thoughts, story, or project..."
+msgstr "ما الذي يجول في بالك؟ شارك أفكارك، قصتك، أو مشروعك..."
+
+msgid "Photo"
+msgstr "صورة"
+
+msgid "Publish"
+msgstr "نشر"
+
+msgid "Remove image"
+msgstr "إزالة الصورة"
+
+msgid "Join the conversation on NIVO"
+msgstr "انضم إلى المحادثة على نيفو"
+
+msgid ""
+"Connect with creators, share stories, and explore vibrant communities "
+"worldwide."
+msgstr ""
+"تواصل مع المبدعين، وشارك قصصك، واستكشف مجتمعات نابضة بالحياة حول العالم."
+
+msgid "Create Free Account"
+msgstr "إنشاء حساب مجاني"
+
+msgid "Post options"
+msgstr "خيارات المنشور"
+
+msgid "Edit"
+msgstr "تعديل"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Like post"
+msgstr "الإعجاب بالمنشور"
+
+msgid "Log in to like"
+msgstr "سجل الدخول للإعجاب"
+
+msgid "Comments"
+msgstr "التعليقات"
+
+msgid "View thread"
+msgstr "عرض المناقشة"
+
+msgid "View all %(count)s comments"
+msgstr "عرض جميع التعليقات (%(count)s)"
+
+msgid "Write a comment..."
+msgstr "اكتب تعليقاً..."
+
+msgid "Send comment"
+msgstr "إرسال التعليق"
+
+msgid "Your feed is quiet"
+msgstr "خلاصتك هادئة حالياً"
+
+msgid ""
+"Follow inspiring creators or share your own thoughts to bring your feed to "
+"life!"
+msgstr "تابع المبدعين الملهمين أو شارك منشوراتك لإحياء خلاصتك!"
+
+msgid "Posts"
+msgstr "المنشورات"
+
+msgid "Followers"
+msgstr "المتابعون"
+
+msgid "Following"
+msgstr "المتابعون لهم"
+
+msgid "Suggested Creators"
+msgstr "مبدعون مقترحون"
+
+msgid "Follow"
+msgstr "متابعة"
+
+msgid "Engineered with Python & Django for CodeAlpha Internship."
+msgstr "تم التطوير باستخدام بايثون ودجانجو لتدريب كود ألفا."
+
+msgid "Post by"
+msgstr "منشور بواسطة"
+
+msgid "Back to Feed"
+msgstr "العودة إلى الخلاصة"
+
+msgid "Discussion"
+msgstr "المناقشة"
+
+msgid "Delete this comment?"
+msgstr "هل تريد حذف هذا التعليق؟"
+
+msgid "No comments yet. Start the conversation!"
+msgstr "لا توجد تعليقات بعد. ابدأ المحادثة!"
+
+msgid "Add to the discussion..."
+msgstr "أضف إلى المناقشة..."
+
+msgid "Log in to post a comment."
+msgstr "سجل الدخول لإضافة تعليق."
+
+msgid "Edit Post"
+msgstr "تعديل المنشور"
+
+msgid "Post Content"
+msgstr "محتوى المنشور"
+
+msgid "Current Image"
+msgstr "الصورة الحالية"
+
+msgid "Replace or Add Image"
+msgstr "استبدال أو إضافة صورة"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+msgid "Delete this post?"
+msgstr "هل تريد بالتأكيد حذف هذا المنشور؟"
+
+msgid ""
+"This action is permanent and cannot be undone. All comments and likes "
+"associated with this post will also be deleted."
+msgstr ""
+"هذا الإجراء نهائي ولا يمكن التراجع عنه. سيتم أيضاً حذف كافة التعليقات "
+"والإعجابات المرتبطة بهذا المنشور."
+
+msgid "Yes, Delete Permanently"
+msgstr "نعم، احذف نهائياً"
+
+msgid "Welcome Back"
+msgstr "أهلاً بك مجدداً"
+
+msgid "Enter your credentials to access your NIVO feed."
+msgstr "أدخل بياناتك للوصول إلى خلاصة نيفو الخاصة بك."
+
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgid "Password"
+msgstr "كلمة المرور"
+
+msgid "Sign In"
+msgstr "تسجيل الدخول"
+
+msgid "Don't have an account?"
+msgstr "ليس لديك حساب بعد؟"
+
+msgid "Create one now"
+msgstr "أنشئ حساباً الآن"
+
+msgid "Create Your Account"
+msgstr "أنشئ حسابك الجديد"
+
+msgid "Your world, in sync. Share your stories with global communities."
+msgstr "عالمك، بتواصل يجمعنا. شارك قصصك مع مجتمعات عالمية."
+
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+msgid "Email Address"
+msgstr "البريد الإلكتروني"
+
+msgid "Confirm Password"
+msgstr "تأكيد كلمة المرور"
+
+msgid "Create Account"
+msgstr "إنشاء الحساب"
+
+msgid "Already have an account?"
+msgstr "لديك حساب بالفعل؟"
+
+msgid "Edit Profile"
+msgstr "تعديل الملف الشخصي"
+
+msgid "Joined"
+msgstr "انضم في"
+
+msgid "Posts by"
+msgstr "منشورات"
+
+msgid "No posts yet"
+msgstr "لا توجد منشورات بعد"
+
+msgid "When this user publishes stories or media, they will appear here."
+msgstr "عندما يقوم هذا المستخدم بنشر قصص أو وسائط، ستظهر هنا."
+
+msgid "Edit Your Profile"
+msgstr "تعديل ملفك الشخصي"
+
+msgid "Update your avatar, bio, and personal details."
+msgstr "حدّث صورتك الشخصية، نبذتك التعريفية، وبياناتك الشخصية."
+
+msgid "Profile Photo"
+msgstr "الصورة الشخصية"
+
+msgid "Recommended: Square JPG or PNG, max 5MB."
+msgstr "الموصى به: صورة مربعة بصيغة JPG أو PNG، بحد أقصى 5 ميجابايت."
+
+msgid "Bio"
+msgstr "النبذة التعريفية"
+
+msgid "Location"
+msgstr "الموقع"
+
+msgid "Website"
+msgstr "الموقع الإلكتروني"
+
+msgid "Save Profile"
+msgstr "حفظ الملف الشخصي"
+
+msgid "Back to Profile"
+msgstr "العودة إلى الملف الشخصي"
+
+msgid "No users in this list yet."
+msgstr "لا يوجد مستخدمون في هذه القائمة بعد."
+
+msgid "Find People on NIVO"
+msgstr "ابحث عن أشخاص في نيفو"
+
+msgid "Search by username or display name..."
+msgstr "ابحث باسم المستخدم أو الاسم المعروض..."
+
+msgid "Found %(count)s results for \"%(search_term)s\""
+msgstr "تم العثور على %(count)s نتيجة لـ \"%(search_term)s\""
+
+msgid "No creators found"
+msgstr "لم يتم العثور على مبدعين"
+
+msgid "Try searching for a different name or keyword."
+msgstr "جرّب البحث باسم أو كلمة مفتاحية مختلفة."
+
+msgid "Mark all as read"
+msgstr "تحديد الكل كمقروء"
+
+msgid "liked your post."
+msgstr "أعجب بمنشورك."
+
+msgid "commented on your post."
+msgstr "علق على منشورك."
+
+msgid "started following you."
+msgstr "بدأ بمتابعتك."
+
+msgid "View post"
+msgstr "عرض المنشور"
+
+msgid "All caught up!"
+msgstr "أنت على اطلاع بكل جديد!"
+
+msgid ""
+"When users interact with your posts or follow you, notifications will show "
+"up here."
+msgstr "عندما يتفاعل المستخدمون مع منشوراتك أو يتابعونك، ستظهر الإشعارات هنا."
+
+msgid "ago"
+msgstr "مضت"
+
+msgid "Just now"
+msgstr "الآن"
+
+msgid "Post"
+msgstr "نشر"
+
+msgid "English"
+msgstr "الإنجليزية"
+
+msgid "Arabic"
+msgstr "العربية"
+
+msgid "العربية"
+msgstr "العربية"
+
+msgid "Welcome to NIVO! Your account has been created."
+msgstr "مرحباً بك في نيفو! تم إنشاء حسابك بنجاح."
+
+msgid "Please correct the errors below."
+msgstr "يرجى تصحيح الأخطاء أدناه."
+
+msgid "Welcome back, @%(username)s!"
+msgstr "مرحباً بعودتك، @%(username)s!"
+
+msgid "Invalid username or password."
+msgstr "اسم المستخدم أو كلمة المرور غير صحيحة."
+
+msgid "You have been logged out."
+msgstr "تم تسجيل خروجك بنجاح."
+
+msgid "Your profile has been updated successfully."
+msgstr "تم تحديث ملفك الشخصي بنجاح."
+
+msgid "You cannot follow yourself."
+msgstr "لا يمكنك متابعة نفسك."
+
+msgid "You unfollowed @%(username)s."
+msgstr "قمت بإلغاء متابعة @%(username)s."
+
+msgid "You are now following @%(username)s."
+msgstr "أصبحت الآن تتابع @%(username)s."
+
+msgid "Your post has been published!"
+msgstr "تم نشر منشورك بنجاح!"
+
+msgid "Post updated successfully."
+msgstr "تم تحديث المنشور بنجاح."
+
+msgid "Post has been deleted."
+msgstr "تم حذف المنشور."
+
+msgid "Comment added!"
+msgstr "تمت إضافة التعليق!"
+
+msgid "Comment deleted."
+msgstr "تم حذف التعليق."
+
+msgid "A post must contain either text content or an image."
+msgstr "يجب أن يحتوي المنشور على نص أو صورة."
+
+msgid "Image file size cannot exceed 10MB."
+msgstr "لا يمكن أن يتجاوز حجم ملف الصورة 10 ميجابايت."
+
+msgid "Comment cannot be empty."
+msgstr "لا يمكن أن يكون التعليق فارغاً."
+
+msgid "Reels"
+msgstr "ريلز"
+
+msgid "NIVO Reels"
+msgstr "ريلز NIVO"
+
+msgid "Upload Reel"
+msgstr "نشر مقطع ريلز"
+
+msgid "New Reel"
+msgstr "ريلز جديد"
+
+msgid "Back to Reels"
+msgstr "العودة إلى الريلز"
+
+msgid "Select Video File"
+msgstr "اختر ملف الفيديو"
+
+msgid "Click to select or drag video here"
+msgstr "انقر لاختيار الفيديو أو اسحبه هنا"
+
+msgid "Supports MP4, WebM, MOV up to 50MB (9:16 vertical recommended)"
+msgstr "يدعم MP4 و WebM و MOV حتى 50 ميجابايت (يفضل عمودي 9:16)"
+
+msgid "Caption"
+msgstr "الوصف"
+
+msgid "Write a captivating caption with #hashtags..."
+msgstr "اكتب وصفاً مميزاً مع وسوم #هاشتاج..."
+
+msgid "Audio / Sound Title"
+msgstr "اسم الصوت / المقطع الصوتي"
+
+msgid "e.g. Original Sound — @username"
+msgstr "مثال: الصوت الأصلي — @username"
+
+msgid "Publish Reel"
+msgstr "نشر الريلز"
+
+msgid "No Reels Shared Yet"
+msgstr "لا توجد مقاطع ريلز بعد"
+
+msgid "Be the first to share a vertical video story with the NIVO community!"
+msgstr "كن أول من يشارك قصة فيديو عمودية مع مجتمع NIVO!"
+
+msgid "Upload First Reel"
+msgstr "انشر أول مقطع ريلز"
+
+msgid "Log In to Create Reels"
+msgstr "سجل الدخول لإنشاء ريلز"
+
+msgid "Original Sound"
+msgstr "صوت أصلي"
+
+msgid "Add a comment..."
+msgstr "أضف تعليقاً..."
+
+msgid "Reel link copied to clipboard!"
+msgstr "تم نسخ رابط الريلز إلى الحافظة!"
+
+msgid "Direct Messages"
+msgstr "الرسائل المباشرة"
+
+msgid "Messages"
+msgstr "الرسائل"
+
+msgid "Message"
+msgstr "مراسلة"
+
+msgid "Message..."
+msgstr "اكتب رسالة..."
+
+msgid "You"
+msgstr "أنت"
+
+msgid "[Attachment]"
+msgstr "[مرفق]"
+
+msgid "Conversation started"
+msgstr "بدأت المحادثة"
+
+msgid "Your inbox is empty"
+msgstr "صندوق رسائلك فارغ"
+
+msgid "Connect with creators to start direct messaging."
+msgstr "تواصل مع المبدعين لبدء المراسلة المباشرة."
+
+msgid "Your Direct Messages"
+msgstr "رسائلك المباشرة"
+
+msgid ""
+"Send private messages, media attachments, and stay in sync with friends and "
+"creators on NIVO."
+msgstr "أرسل رسائل خاصة ومرفقات وتواصل بتناغم مع الأصدقاء والمبدعين على NIVO."
+
+msgid "Find Friends to Message"
+msgstr "ابحث عن أصدقاء لمراسلتهم"
+
+msgid "Conversation"
+msgstr "المحادثة"
+
+msgid "All conversations"
+msgstr "جميع المحادثات"
+
+msgid "Back to inbox"
+msgstr "العودة إلى الوارد"
+
+msgid "Voice Call"
+msgstr "مكالمة صوتية"
+
+msgid "Video Call"
+msgstr "مكالمة فيديو"
+
+msgid "Connecting WebRTC Secure Call..."
+msgstr "جارٍ بدء مكالمة WebRTC الآمنة..."
+
+msgid "Starting WebRTC Video Stream..."
+msgstr "جارٍ تشغيل بث فيديو WebRTC..."
+
+msgid "Connecting WebRTC Voice Call..."
+msgstr "جارٍ الاتصال بمكالمة WebRTC الصوتية..."
+
+msgid "Mute Mic"
+msgstr "كتم الميكروفون"
+
+msgid "Toggle Camera"
+msgstr "تبديل الكاميرا"
+
+msgid "End Call"
+msgstr "إنهاء المكالمة"
+
+msgid "Close Window"
+msgstr "إغلاق النافذة"
+
+msgid "Attach image"
+msgstr "إرفاق صورة"
+
+msgid "Delete this message?"
+msgstr "حذف هذه الرسالة؟"
+
+msgid "This is the start of your encrypted messaging history on NIVO."
+msgstr "هذه بداية سجل محادثاتك المشفرة على NIVO."
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Account Information"
+msgstr "معلومات الحساب"
+
+msgid "Edit Profile & Cover"
+msgstr "تعديل الملف الشخصي والغلاف"
+
+msgid "Privacy & Messaging"
+msgstr "الخصوصية والرسائل"
+
+msgid "Notification Preferences"
+msgstr "تفضيلات الإشعارات"
+
+msgid "Theme & Appearance"
+msgstr "المظهر والسمة"
+
+msgid "Language (اللغة)"
+msgstr "اللغة"
+
+msgid "Language Preferences"
+msgstr "تفضيلات اللغة"
+
+msgid "Password & Security"
+msgstr "كلمة المرور والأمان"
+
+msgid "Help & Community Guidelines"
+msgstr "المساعدة وإرشادات المجتمع"
+
+msgid "Help & About NIVO"
+msgstr "المساعدة ونبذة عن NIVO"
+
+msgid "Delete Account"
+msgstr "حذف الحساب"
+
+msgid "Saved Collection"
+msgstr "المحفوظات"
+
+msgid "Saved Posts"
+msgstr "المنشورات المحفوظة"
+
+msgid "Remove from saved"
+msgstr "إزالة من المحفوظات"
+
+msgid "Remove"
+msgstr "إزالة"
+
+msgid "saved"
+msgstr "محفوظ"
+
+msgid "No Saved Posts Yet"
+msgstr "لا توجد منشورات محفوظة بعد"
+
+msgid ""
+"When you see posts you want to revisit later, tap the bookmark icon on any "
+"post in your feed."
+msgstr ""
+"عندما ترى منشورات تود الرجوع إليها لاحقاً، اضغط على أيقونة الإشارة المرجعية."
+
+msgid "Explore Feed"
+msgstr "استكشف الخلاصة"
+
+msgid "Repost"
+msgstr "إعادة نشر"
+
+msgid "Reposts"
+msgstr "إعادات النشر"
+
+msgid "reposted"
+msgstr "أعاد النشر"
+
+msgid "Share"
+msgstr "مشاركة"
+
+msgid "Share Post"
+msgstr "مشاركة المنشور"
+
+msgid "Share Link"
+msgstr "مشاركة الرابط"
+
+msgid "Post link copied to clipboard!"
+msgstr "تم نسخ رابط المنشور إلى الحافظة!"
+
+msgid "Report Post"
+msgstr "الإبلاغ عن المنشور"
+
+msgid "Report Content"
+msgstr "الإبلاغ عن محتوى"
+
+msgid "Why are you reporting this post?"
+msgstr "لماذا تبلغ عن هذا المنشور؟"
+
+msgid "Select a reason..."
+msgstr "اختر سبباً..."
+
+msgid "Spam, scam, or commercial bot activity"
+msgstr "بريد عشوائي أو احتيال أو نشاط آلي تجاري"
+
+msgid "Harassment, hate speech, or bullying"
+msgstr "مضايقة أو خطاب كراهية أو تنمر"
+
+msgid "Nudity, sexual, or sensitive content"
+msgstr "محتوى غير لائق أو حساس"
+
+msgid "Violence, self-harm, or dangerous threats"
+msgstr "عنف أو إيذاء للنفس أو تهديدات خطيرة"
+
+msgid "Copyright or intellectual property violation"
+msgstr "انتهاك حقوق النشر أو الملكية الفكرية"
+
+msgid "Other community policy violation"
+msgstr "انتهاك آخر لسياسات المجتمع"
+
+msgid "Additional details (optional):"
+msgstr "تفاصيل إضافية (اختياري):"
+
+msgid "Provide any additional context for our moderation team..."
+msgstr "أضف أي سياق إضافي لفريق الإشراف..."
+
+msgid "Submit Report"
+msgstr "إرسال البلاغ"
+
+msgid "Home Feed"
+msgstr "الرئيسية"
+
+msgid "Explore & Search"
+msgstr "استكشاف وبحث"
+
+msgid "My Profile"
+msgstr "ملفي الشخصي"
+
+msgid "Reels & Video"
+msgstr "ريلز وفيديو"
+
+msgid "Your story has been published on NIVO!"
+msgstr "تم نشر قصتك على NIVO!"
+
+msgid "Your reel has been shared with the NIVO community!"
+msgstr "تمت مشاركة الريلز مع مجتمع NIVO!"
+
+msgid "Thank you. Your report has been submitted for review."
+msgstr "شكراً لك. تم إرسال بلاغك للمراجعة."
+
+msgid "Saved to your collection!"
+msgstr "تم الحفظ في مجموعتك!"
+
+msgid "Removed from saved posts."
+msgstr "تمت الإزالة من المنشورات المحفوظة."
+
+msgid "Reposted to your profile!"
+msgstr "تمت إعادة النشر في ملفك الشخصي!"
+
+msgid "Repost removed."
+msgstr "تمت إزالة إعادة النشر."
+
+msgid "This Account is Private"
+msgstr "هذا الحساب خاص"
+
+msgid ""
+"Follow this account to see their posts, reels, and community interactions."
+msgstr "تابع هذا الحساب لرؤية منشوراته ومقاطع الريلز وتفاعلاته."
+
+msgid "Log In to Request Access"
+msgstr "سجل الدخول لطلب المتابعة"
+
+msgid "Change Cover"
+msgstr "تغيير الغلاف"
+
+msgid "Cover Banner"
+msgstr "صورة الغلاف"
+
+msgid "Upload New Avatar"
+msgstr "رفع صورة شخصية جديدة"
+
+msgid "JPG, PNG or WebP. Max 5MB."
+msgstr "JPG أو PNG أو WebP بحد أقصى 5 ميجابايت."
+
+msgid "Website / Portfolio Link"
+msgstr "الموقع الإلكتروني / رابط الأعمال"
+
+msgid "Private Account"
+msgstr "حساب خاص"
+
+msgid "Who Can Send You Direct Messages?"
+msgstr "من يمكنه إرسال رسائل مباشرة إليك؟"
+
+msgid "Everyone (Open DMs)"
+msgstr "الجميع (رسائل مفتوحة)"
+
+msgid "People You Follow or Followers Only"
+msgstr "من تتابعهم أو المتابعون فقط"
+
+msgid "No One (Disable Direct Messages)"
+msgstr "لا أحد (تعطيل الرسائل المباشرة)"
+
+msgid "Save Privacy Preferences"
+msgstr "حفظ تفضيلات الخصوصية"
+
+msgid "Likes & Reel Hearts"
+msgstr "الإعجابات وقلوب الريلز"
+
+msgid "When someone likes one of your posts or video reels"
+msgstr "عندما يعجب شخص بأحد منشوراتك أو مقاطع الريلز"
+
+msgid "Comments & Replies"
+msgstr "التعليقات والردود"
+
+msgid "When someone joins the discussion on your posts or reels"
+msgstr "عندما ينضم شخص إلى النقاش حول منشوراتك أو مقاطع الريلز"
+
+msgid "New Followers"
+msgstr "المتابعون الجدد"
+
+msgid "When someone starts following your profile"
+msgstr "عندما يبدأ شخص بمتابعة حسابك"
+
+msgid "When someone sends you a new private message"
+msgstr "عندما يرسل لك شخص رسالة خاصة جديدة"
+
+msgid "Reposts & Amplifications"
+msgstr "إعادة النشر والمشاركة"
+
+msgid "When someone reposts your story to their profile feed"
+msgstr "عندما يعيد شخص نشر قصتك في ملفه الشخصي"
+
+msgid "Save Notification Settings"
+msgstr "حفظ إعدادات الإشعارات"
+
+msgid "Obsidian Dark"
+msgstr "داكن أوبسيديان"
+
+msgid "Clean Light"
+msgstr "فاتح نقي"
+
+msgid "Neon Lime & Deep Purple glow on rich obsidian canvas."
+msgstr "توهج ليموني نيون وبنفسجي عميق على خلفية داكنة فاخرة."
+
+msgid "Crisp typography with high-contrast royal purple accents."
+msgstr "خطوط واضحة وتفاصيل متباينة باللون البنفسجي الملكي."
+
+msgid "NIVO Brand Palette Preview"
+msgstr "معاينة لوحة ألوان علامة NIVO"
+
+msgid "Current Password"
+msgstr "كلمة المرور الحالية"
+
+msgid "New Password"
+msgstr "كلمة المرور الجديدة"
+
+msgid "Confirm New Password"
+msgstr "تأكيد كلمة المرور الجديدة"
+
+msgid "Update Password"
+msgstr "تحديث كلمة المرور"
+
+msgid "Minimum 6 characters. Must not be too common or entirely numeric."
+msgstr "6 أحرف كحد أدنى. لا يجب أن تكون شائعة جداً أو رقمية بالكامل."
+
+msgid "Active Sessions Protection:"
+msgstr "حماية الجلسات النشطة:"
+
+msgid ""
+"When you change your password, Django automatically updates your active "
+"session token so you stay logged in securely on this device."
+msgstr ""
+"عند تغيير كلمة المرور، يحدّث Django رمز جلستك النشطة تلقائياً لتبقى مسجل "
+"الدخول بأمان."
+
+msgid "Permanently Delete My NIVO Account"
+msgstr "حذف حساب NIVO الخاص بي نهائياً"
+
+msgid "Enter your current password to confirm deletion:"
+msgstr "أدخل كلمة المرور الحالية لتأكيد الحذف:"
+
+msgid ""
+"Are you absolutely sure you want to permanently delete your NIVO account?"
+msgstr "هل أنت متأكد تماماً من رغبتك في حذف حساب NIVO الخاص بك نهائياً؟"
+
+msgid "Warning: This action is permanent and irreversible."
+msgstr "تحذير: هذا الإجراء دائم ولا يمكن التراجع عنه."
+
+msgid ""
+"Once your account is deleted, all your content, followers, liked posts, and "
+"messaging history will be permanently wiped from NIVO servers. There is no "
+"recovery."
+msgstr ""
+"بمجرد حذف الحساب، سيتم مسح كافة محتوياتك والمتابعين وسجل الرسائل نهائياً من "
+"خوادم NIVO."
+
+msgid "Voice Message"
+msgstr "رسالة صوتية"
+
+msgid "Duration (seconds)"
+msgstr "المدة (بالثواني)"
+
+msgid "Message Reaction"
+msgstr "تفاعل مع الرسالة"
+
+msgid "Message Reactions"
+msgstr "تفاعلات الرسالة"
+
+msgid "Sound Title"
+msgstr "عنوان الصوت"
+
+msgid "Saved Reels"
+msgstr "الريلز المحفوظة"
+
+msgid "Block"
+msgstr "حظر"
+
+msgid "Unblock"
+msgstr "إلغاء الحظر"
+
+msgid "Blocked"
+msgstr "محظور"
+
+msgid "Accepted follow request from @%(username)s."
+msgstr "تم قبول طلب المتابعة من @%(username)s."
+
+msgid "Declined follow request from @%(username)s."
+msgstr "تم رفض طلب المتابعة من @%(username)s."
+
+msgid "Removed @%(username)s from your followers."
+msgstr "تمت إزالة @%(username)s من قائمة متابعيك."
+
+msgid "@%(username)s has been blocked."
+msgstr "تم حظر @%(username)s."
+
+msgid "@%(username)s has been unblocked."
+msgstr "تم إلغاء حظر @%(username)s."
+
+msgid "Cannot message a blocked user."
+msgstr "لا يمكن مراسلة مستخدم محظور."
+
+msgid "@%(username)s does not accept direct messages from you."
+msgstr "لا يستقبل @%(username)s رسائل مباشرة منك."
+
+msgid "Posts from private accounts cannot be reposted."
+msgstr "لا يمكن إعادة نشر منشورات الحسابات الخاصة."
+
+msgid "Cannot save content you are not authorized to view."
+msgstr "لا يمكنك حفظ محتوى غير مصرح لك بمشاهدته."
+
+msgid "Cannot save a private reel."
+msgstr "لا يمكن حفظ ريلز خاص."
+
+msgid "Cannot comment on a private reel."
+msgstr "لا يمكن التعليق على ريلز خاص."
+
+msgid "Only POST is permitted for state change."
+msgstr "يُسمح فقط بطلبات POST لتغيير الحالة."
+
+msgid "Incorrect password. Account deletion was not completed."
+msgstr "كلمة المرور غير صحيحة. لم يتم حذف الحساب."
+
+msgid "Your account has been deleted."
+msgstr "تم حذف حسابك بنجاح."
+
+msgid ""
+"A user with that username already exists (usernames are case-insensitive)."
+msgstr ""
+"يوجد مستخدم بهذا الاسم بالفعل (أسماء المستخدمين غير حساسة لحالة الأحرف)."
+
+msgid "Message must contain text, an image, or a voice recording."
+msgstr "يجب أن تحتوي الرسالة على نص أو صورة أو تسجيل صوتي."
+
+msgid "Voice message cannot exceed 15MB."
+msgstr "لا يمكن أن يتجاوز حجم الرسالة الصوتية 15 ميغابايت."
+
+msgid "Invalid audio format. Allowed: WebM, Ogg, WAV, MP4 audio."
+msgstr "صيغة الصوت غير صالحة. الصيغ المدعومة: WebM، Ogg، WAV، MP4."
+
+msgid "Hold or click to record voice message"
+msgstr "اضغط أو استمر بالضغط لتسجيل رسالة صوتية"
+
+msgid "Audio Calling & Video Calling"
+msgstr "المكالمات الصوتية والمرئية"
+
+msgid ""
+"Direct P2P voice and video calls require signaling infrastructure (such as "
+"WebSockets and STUN/TURN servers) which are currently being integrated into "
+"NIVO. In the meantime, you can record and send crystal-clear voice messages "
+"directly in the conversation!"
+msgstr ""
+"تتطلب المكالمات المباشرة بين النظراء بنية أساسية للإشارات (مثل WebSockets "
+"وخوادم STUN/TURN) والتي يجري دمجها في نيفو (NIVO). في هذه الأثناء، يمكنك "
+"تسجيل وإرسال رسائل صوتية واضحة ونقية مباشرة داخل المحادثة!"

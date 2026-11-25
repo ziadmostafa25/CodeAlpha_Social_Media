@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% block settings_title %}{% trans "Settings" %}{% endblock %} — NIVO{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+  
+  <!-- Settings Navigation Sidebar -->
+  <aside class="settings-nav-card">
+    <div class="settings-nav-header">
+      {% trans "Settings" %}
+    </div>
+
+    <ul class="settings-nav-list">
+      <!-- 1. Account -->
+      <li>
+        <a href="{% url 'settings:account' %}" class="settings-nav-link {% if active_section == 'account' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          {% trans "Account Information" %}
+        </a>
+      </li>
+
+      <!-- 2. Profile -->
+      <li>
+        <a href="{% url 'settings:profile' %}" class="settings-nav-link {% if active_section == 'profile' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          {% trans "Edit Profile & Cover" %}
+        </a>
+      </li>
+
+      <!-- 3. Privacy -->
+      <li>
+        <a href="{% url 'settings:privacy' %}" class="settings-nav-link {% if active_section == 'privacy' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          {% trans "Privacy & Messaging" %}
+        </a>
+      </li>
+
+      <!-- 4. Notifications -->
+      <li>
+        <a href="{% url 'settings:notifications' %}" class="settings-nav-link {% if active_section == 'notifications' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          {% trans "Notification Preferences" %}
+        </a>
+      </li>
+
+      <!-- 5. Appearance -->
+      <li>
+        <a href="{% url 'settings:appearance' %}" class="settings-nav-link {% if active_section == 'appearance' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          {% trans "Theme & Appearance" %}
+        </a>
+      </li>
+
+      <!-- 6. Language -->
+      <li>
+        <a href="{% url 'settings:language' %}" class="settings-nav-link {% if active_section == 'language' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          {% trans "Language (اللغة)" %}
+        </a>
+      </li>
+
+      <!-- 7. Security -->
+      <li>
+        <a href="{% url 'settings:security' %}" class="settings-nav-link {% if active_section == 'security' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          {% trans "Password & Security" %}
+        </a>
+      </li>
+
+      <!-- 8. Help Center -->
+      <li>
+        <a href="{% url 'settings:help' %}" class="settings-nav-link {% if active_section == 'help' %}active{% endif %}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          {% trans "Help & Community Guidelines" %}
+        </a>
+      </li>
+
+      <!-- 9. Danger: Delete Account -->
+      <li>
+        <a href="{% url 'settings:delete_account' %}" class="settings-nav-link {% if active_section == 'delete_account' %}active{% endif %}" style="color: var(--accent-danger);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          {% trans "Delete Account" %}
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Settings Main Panel -->
+  <main class="settings-panel-card">
+    {% block settings_content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}

@@ -1,0 +1,491 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Feed" %} — NIVO{% endblock %}
+
+{% block content %}
+<main class="main-wrapper">
+  
+  <!-- Left/Center Feed Column -->
+  <section class="feed-column">
+    
+    <!-- Post Creation Box (Authenticated Users) -->
+    {% if user.is_authenticated %}
+      <div class="card create-post-card">
+        <form action="{% url 'posts:create_post' %}" method="post" enctype="multipart/form-data" id="post-create-form">
+          {% csrf_token %}
+          <div class="create-post-header">
+            {% if user.profile.get_avatar_url %}
+              <img src="{{ user.profile.get_avatar_url }}" alt="{{ user.username }}" class="create-post-avatar">
+            {% else %}
+              <div class="create-post-avatar avatar-initials">{{ user.username|first|upper }}</div>
+            {% endif %}
+            <div class="create-post-body">
+              {{ post_form.content }}
+              
+              <!-- Image Preview Container -->
+              <div class="image-preview-container" id="image-preview-container">
+                <img id="image-preview-img" class="image-preview-img" src="" alt="Selected image preview">
+                <button type="button" class="remove-preview-btn" id="remove-preview-btn" title="{% trans 'Remove image' %}">
+                  &times;
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="create-post-footer">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              {{ post_form.image }}
+              <label for="post-image-input" class="media-upload-label" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.825rem; color: var(--text-secondary);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>{% trans "Photo" %}</span>
+              </label>
+
+              <!-- Quick Link to Upload Reel -->
+              <a href="{% url 'posts:create_reel' %}" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.825rem; color: var(--nivo-lime); font-weight: 600;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                  <line x1="7" y1="2" x2="7" y2="22"></line>
+                  <line x1="17" y1="2" x2="17" y2="22"></line>
+                </svg>
+                <span>{% trans "Reel" %}</span>
+              </a>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              <span>{% trans "Publish" %}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    {% else %}
+      <div class="card" style="text-align: center; padding: 2rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem;">{% trans "Join the conversation on NIVO" %}</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.25rem;">{% trans "Connect with creators, share stories, and explore vibrant communities worldwide." %}</p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+          <a href="{% url 'accounts:login' %}" class="btn btn-outline">{% trans "Log In" %}</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary">{% trans "Create Free Account" %}</a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Posts Feed Stream -->
+    {% if posts %}
+      {% for post in posts %}
+        <article class="card post-card" id="post-{{ post.id }}">
+          
+          <!-- Post Author Header -->
+          <div class="post-header">
+            <div class="post-author-info">
+              <a href="{% url 'accounts:profile' username=post.author.username %}">
+                {% if post.author.profile.get_avatar_url %}
+                  <img src="{{ post.author.profile.get_avatar_url }}" alt="{{ post.author.username }}" class="post-author-avatar">
+                {% else %}
+                  <div class="post-author-avatar avatar-initials">{{ post.author.username|first|upper }}</div>
+                {% endif %}
+              </a>
+              <div class="post-author-names">
+                <a href="{% url 'accounts:profile' username=post.author.username %}" class="post-display-name">
+                  {{ post.author.profile.get_display_name }}
+                </a>
+                <span class="post-username-time">
+                  <span>@{{ post.author.username }}</span>
+                  <span>•</span>
+                  <span>{{ post.created_at|timesince }} {% trans "ago" %}</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Post Menu Dropdown -->
+            <div class="post-menu-wrapper">
+              <button type="button" class="post-menu-btn" aria-label="{% trans 'Post options' %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <circle cx="19" cy="12" r="1"></circle>
+                  <circle cx="5" cy="12" r="1"></circle>
+                </svg>
+              </button>
+              <div class="post-dropdown">
+                {% if user.is_authenticated and post.author == user %}
+                  <a href="{% url 'posts:edit_post' post_id=post.id %}" class="dropdown-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    <span>{% trans "Edit" %}</span>
+                  </a>
+                  <a href="{% url 'posts:delete_post' post_id=post.id %}" class="dropdown-item text-danger">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>{% trans "Delete" %}</span>
+                  </a>
+                {% endif %}
+                {% if user.is_authenticated and post.author != user %}
+                  <a href="{% url 'posts:report_post' post_id=post.id %}" class="dropdown-item text-danger">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                      <line x1="4" y1="22" x2="4" y2="15"></line>
+                    </svg>
+                    <span>{% trans "Report Post" %}</span>
+                  </a>
+                {% endif %}
+                <button type="button" class="dropdown-item" onclick="sharePost('{{ post.id }}', '{{ post.get_absolute_url|default:'' }}')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                  <span>{% trans "Share Link" %}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Post Content -->
+          {% if post.content %}
+            <div class="post-content-body">{{ post.content }}</div>
+          {% endif %}
+
+          <!-- Optional Post Image -->
+          {% if post.image %}
+            <div class="post-media-container">
+              <a href="{% url 'posts:post_detail' post_id=post.id %}">
+                <img src="{{ post.image.url }}" alt="Post image" class="post-media-img" loading="lazy">
+              </a>
+            </div>
+          {% endif %}
+
+          <!-- Actions Bar (Likes, Comments, Reposts, Saves, Shares) -->
+          <div class="post-actions-bar">
+            <div class="action-buttons-group">
+              
+              <!-- Like Button -->
+              {% if user.is_authenticated %}
+                <button type="button" 
+                        class="action-btn like-toggle-btn {% if post.id in user_liked_post_ids %}liked{% endif %}" 
+                        data-post-id="{{ post.id }}" 
+                        aria-label="{% trans 'Like post' %}">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                  <span class="like-count">{{ post.likes_count }}</span>
+                </button>
+              {% else %}
+                <a href="{% url 'accounts:login' %}" class="action-btn" title="{% trans 'Log in to like' %}">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                  <span>{{ post.likes_count }}</span>
+                </a>
+              {% endif %}
+
+              <!-- Comment Button -->
+              <a href="{% url 'posts:post_detail' post_id=post.id %}" class="action-btn" aria-label="{% trans 'Comments' %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span data-comment-count-for="{{ post.id }}">{{ post.comments_count }}</span>
+              </a>
+
+              <!-- Repost Button -->
+              {% if user.is_authenticated %}
+                <form action="{% url 'posts:repost_toggle' post_id=post.id %}" method="post" class="ajax-repost-form" style="display:inline;" data-post-id="{{ post.id }}">
+                  {% csrf_token %}
+                  <button type="submit" class="action-btn repost-toggle-btn {% if post.id in user_reposted_post_ids %}reposted{% endif %}" title="{% trans 'Repost' %}" aria-label="{% trans 'Repost' %}" style="{% if post.id in user_reposted_post_ids %}color:var(--nivo-lime);{% endif %}">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="17 1 21 5 17 9"></polyline>
+                      <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                      <polyline points="7 23 3 19 7 15"></polyline>
+                      <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                    <span class="repost-count-{{ post.id }}">{{ post.reposts.count }}</span>
+                  </button>
+                </form>
+              {% else %}
+                <a href="{% url 'accounts:login' %}" class="action-btn" title="{% trans 'Log in to repost' %}">
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="17 1 21 5 17 9"></polyline>
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                    <polyline points="7 23 3 19 7 15"></polyline>
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                  </svg>
+                  <span>{{ post.reposts.count }}</span>
+                </a>
+              {% endif %}
+
+              <!-- Bookmark / Save Button -->
+              {% if user.is_authenticated %}
+                <form action="{% url 'posts:save_toggle' post_id=post.id %}" method="post" class="ajax-save-form" style="display:inline;" data-post-id="{{ post.id }}">
+                  {% csrf_token %}
+                  <button type="submit" class="action-btn save-toggle-btn {% if post.id in user_saved_post_ids %}saved{% endif %}" title="{% trans 'Save to collection' %}" aria-label="{% trans 'Save' %}" style="{% if post.id in user_saved_post_ids %}color:var(--nivo-lime);{% endif %}">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="{% if post.id in user_saved_post_ids %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </button>
+                </form>
+              {% endif %}
+
+              <!-- Share Action -->
+              <button type="button" class="action-btn" onclick="sharePost('{{ post.id }}')" title="{% trans 'Share Post' %}" aria-label="{% trans 'Share Post' %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+              </button>
+
+            </div>
+
+            <!-- Detail link -->
+            <a href="{% url 'posts:post_detail' post_id=post.id %}" class="action-btn" style="font-size: 0.8rem; font-weight: 500;">
+              {% trans "View thread" %} &rarr;
+            </a>
+          </div>
+
+          <!-- Inline Comments Section -->
+          <div class="post-comments-container">
+            <div class="comments-list" id="comments-list-{{ post.id }}">
+              {% for comment in post.comments.all|slice:":3" %}
+                <div class="comment-item" id="comment-{{ comment.id }}">
+                  {% if comment.author.profile.get_avatar_url %}
+                    <img src="{{ comment.author.profile.get_avatar_url }}" alt="{{ comment.author.username }}" class="comment-avatar">
+                  {% else %}
+                    <div class="comment-avatar avatar-initials">{{ comment.author.username|first|upper }}</div>
+                  {% endif %}
+                  <div class="comment-bubble">
+                    <div class="comment-meta">
+                      <a href="{% url 'accounts:profile' username=comment.author.username %}" class="comment-author-name">
+                        @{{ comment.author.username }}
+                      </a>
+                      <span class="comment-time">{{ comment.created_at|timesince }} {% trans "ago" %}</span>
+                    </div>
+                    <div class="comment-text">{{ comment.content }}</div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            {% if post.comments_count > 3 %}
+              <div style="text-align: center; margin-bottom: 0.75rem;">
+                <a href="{% url 'posts:post_detail' post_id=post.id %}" style="font-size: 0.825rem; color: var(--accent-primary); font-weight: 600;">
+                  {% blocktrans with count=post.comments_count %}View all {{ count }} comments{% endblocktrans %}
+                </a>
+              </div>
+            {% endif %}
+
+            <!-- Quick Add Comment Form -->
+            {% if user.is_authenticated %}
+              <form action="{% url 'posts:add_comment' post_id=post.id %}" method="post" class="ajax-comment-form" data-post-id="{{ post.id }}">
+                {% csrf_token %}
+                <div class="comment-form-row">
+                  <input type="text" name="content" class="comment-input-field" placeholder="{% trans 'Write a comment...' %}" required autocomplete="off">
+                  <button type="submit" class="btn btn-primary btn-sm" aria-label="{% trans 'Send comment' %}">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            {% endif %}
+          </div>
+
+        </article>
+      {% endfor %}
+    {% else %}
+      <div class="card empty-state">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <h3 class="empty-title">{% trans "Your feed is quiet" %}</h3>
+        <p class="empty-text">{% trans "Follow inspiring creators or share your own thoughts to bring your feed to life!" %}</p>
+      </div>
+    {% endif %}
+
+  </section>
+
+  <!-- Right Sidebar Column -->
+  <aside class="sidebar-column">
+    
+    <!-- User Mini Profile (If Authenticated) -->
+    {% if user.is_authenticated %}
+      <div class="card sidebar-card">
+        <div style="display: flex; align-items: center; gap: 0.85rem; margin-bottom: 1rem;">
+          <a href="{% url 'accounts:profile' username=user.username %}">
+            {% if user.profile.get_avatar_url %}
+              <img src="{{ user.profile.get_avatar_url }}" alt="{{ user.username }}" style="width: 52px; height: 52px; border-radius: var(--radius-full); object-fit: cover;">
+            {% else %}
+              <div style="width: 52px; height: 52px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; background: var(--nivo-purple-gradient); color: white;">
+                {{ user.username|first|upper }}
+              </div>
+            {% endif %}
+          </a>
+          <div style="min-width: 0;">
+            <a href="{% url 'accounts:profile' username=user.username %}" style="font-weight: 700; font-size: 1rem; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+              {{ user.profile.get_display_name }}
+            </a>
+            <span style="font-size: 0.825rem; color: var(--text-muted);">@{{ user.username }}</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-around; border-top: 1px solid var(--border-color); padding-top: 0.85rem; text-align: center;">
+          <a href="{% url 'accounts:profile' username=user.username %}">
+            <div style="font-weight: 800; font-size: 1rem;">{{ user.posts.count }}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">{% trans "Posts" %}</div>
+          </a>
+          <a href="{% url 'accounts:followers' username=user.username %}">
+            <div style="font-weight: 800; font-size: 1rem;">{{ user.followers_set.count }}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">{% trans "Followers" %}</div>
+          </a>
+          <a href="{% url 'accounts:following' username=user.username %}">
+            <div style="font-weight: 800; font-size: 1rem;">{{ user.following_set.count }}</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">{% trans "Following" %}</div>
+          </a>
+        </div>
+
+        <!-- Saved Posts Link Shortcut -->
+        <div style="border-top: 1px solid var(--border-color); margin-top: 0.85rem; padding-top: 0.85rem;">
+          <a href="{% url 'posts:saved_posts' %}" class="btn btn-secondary btn-sm btn-block" style="display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>{% trans "Saved Collection" %}</span>
+          </a>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Suggested Creators -->
+    {% if suggested_users %}
+      <div class="card sidebar-card">
+        <h4 class="sidebar-title">
+          <span>{% trans "Suggested Creators" %}</span>
+        </h4>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for creator in suggested_users %}
+            <div class="suggested-user-item">
+              <div class="user-item-info">
+                <a href="{% url 'accounts:profile' username=creator.username %}">
+                  {% if creator.profile.get_avatar_url %}
+                    <img src="{{ creator.profile.get_avatar_url }}" alt="{{ creator.username }}" style="width: 38px; height: 38px; border-radius: var(--radius-full); object-fit: cover;">
+                  {% else %}
+                    <div style="width: 38px; height: 38px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; font-weight: 700; background: var(--nivo-purple-gradient); color: white; font-size: 0.85rem;">
+                      {{ creator.username|first|upper }}
+                    </div>
+                  {% endif %}
+                </a>
+                <div class="user-item-names">
+                  <a href="{% url 'accounts:profile' username=creator.username %}" class="user-item-display">
+                    {{ creator.profile.get_display_name }}
+                  </a>
+                  <span class="user-item-username">@{{ creator.username }}</span>
+                </div>
+              </div>
+
+              {% if user.is_authenticated and creator != user %}
+                <button type="button" class="btn btn-primary btn-sm follow-toggle-btn" data-username="{{ creator.username }}">
+                  {% trans "Follow" %}
+                </button>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Footer Meta -->
+    <div style="padding: 0 0.5rem; font-size: 0.775rem; color: var(--text-muted); line-height: 1.6;">
+      <p>&copy; 2026 NIVO Social Platform.</p>
+      <p>{% trans "Engineered with Python & Django for CodeAlpha Internship." %}</p>
+    </div>
+
+  </aside>
+
+</main>
+
+<script>
+  function sharePost(postId) {
+    const url = window.location.origin + "/post/" + postId + "/";
+    if (navigator.share) {
+      navigator.share({
+        title: 'NIVO Story',
+        text: 'Check out this post on NIVO!',
+        url: url
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("{% trans 'Post link copied to clipboard!' %}");
+      });
+    }
+  }
+
+  // Handle AJAX reposts and saves
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.ajax-repost-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const postId = this.dataset.postId;
+        fetch(this.action, {
+          method: 'POST',
+          body: new FormData(this),
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            const countEl = document.querySelector('.repost-count-' + postId);
+            if (countEl) countEl.textContent = data.reposts_count;
+            const btn = form.querySelector('.repost-toggle-btn');
+            if (data.is_reposted) {
+              btn.style.color = 'var(--nivo-lime)';
+            } else {
+              btn.style.color = '';
+            }
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll('.ajax-save-form').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetch(this.action, {
+          method: 'POST',
+          body: new FormData(this),
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            const btn = form.querySelector('.save-toggle-btn');
+            const svg = btn.querySelector('svg');
+            if (data.is_saved) {
+              btn.style.color = 'var(--nivo-lime)';
+              svg.setAttribute('fill', 'currentColor');
+            } else {
+              btn.style.color = '';
+              svg.setAttribute('fill', 'none');
+            }
+          }
+        });
+      });
+    });
+  });
+</script>
+{% endblock %}

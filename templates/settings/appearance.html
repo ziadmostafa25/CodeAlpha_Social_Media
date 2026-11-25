@@ -1,0 +1,147 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Theme & Appearance" %}{% endblock %}
+
+{% block settings_content %}
+<h1>{% trans "Theme & Appearance" %}</h1>
+<p class="settings-panel-desc">{% trans "Choose how NIVO looks to you. Seamlessly switch between Obsidian Dark, Clean Light, or match your device system settings." %}</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+  
+  <!-- 1. Dark Mode Card -->
+  <div class="card theme-choice-card" onclick="setAppTheme('dark')" style="cursor: pointer; padding: 1.25rem; border-width: 2px; text-align: center; background: #171A18; color: #F7F7F2;" id="theme-card-dark">
+    <div style="width: 48px; height: 48px; border-radius: 50%; background: #302052; color: #C8F31D; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </div>
+    <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.25rem;">{% trans "Obsidian Dark" %}</h3>
+    <p style="font-size: 0.75rem; color: #94A3B8; margin: 0;">{% trans "Signature Lime & Deep Purple on dark charcoal canvas." %}</p>
+  </div>
+
+  <!-- 2. Light Mode Card -->
+  <div class="card theme-choice-card" onclick="setAppTheme('light')" style="cursor: pointer; padding: 1.25rem; border-width: 2px; text-align: center; background: #FFFFFF; color: #171A18; border-color: var(--border-color);" id="theme-card-light">
+    <div style="width: 48px; height: 48px; border-radius: 50%; background: #E9DFFF; color: #302052; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    </div>
+    <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.25rem;">{% trans "Clean Light" %}</h3>
+    <p style="font-size: 0.75rem; color: #64748B; margin: 0;">{% trans "Crisp typography with high-contrast deep purple accents." %}</p>
+  </div>
+
+  <!-- 3. System Match Card -->
+  <div class="card theme-choice-card" onclick="setAppTheme('system')" style="cursor: pointer; padding: 1.25rem; border-width: 2px; text-align: center; background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-color);" id="theme-card-system">
+    <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(200, 243, 29, 0.2); color: var(--accent-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem auto;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+    </div>
+    <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.25rem;">{% trans "System Match" %}</h3>
+    <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">{% trans "Automatically synchronize with your OS device preference." %}</p>
+  </div>
+
+</div>
+
+<!-- Official NIVO Brand Colors Showcase -->
+<div style="background: var(--bg-hover); border-radius: var(--radius-md); padding: 1.25rem; border: 1px solid var(--border-color);">
+  <h4 style="font-size: 0.85rem; font-weight: 800; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">
+    {% trans "Official NIVO Color Palette" %}
+  </h4>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem;">
+    
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+      <span style="width: 24px; height: 24px; border-radius: 6px; background: #C8F31D; display: inline-block; border: 1px solid rgba(0,0,0,0.15);"></span>
+      <div>
+        <div>Signature Lime</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">#C8F31D</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+      <span style="width: 24px; height: 24px; border-radius: 6px; background: #302052; display: inline-block; border: 1px solid rgba(255,255,255,0.15);"></span>
+      <div>
+        <div>Deep Purple</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">#302052</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+      <span style="width: 24px; height: 24px; border-radius: 6px; background: #171A18; display: inline-block; border: 1px solid rgba(255,255,255,0.15);"></span>
+      <div>
+        <div>Dark Charcoal</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">#171A18</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+      <span style="width: 24px; height: 24px; border-radius: 6px; background: #F7F7F2; display: inline-block; border: 1px solid #CBD5E1;"></span>
+      <div>
+        <div>Soft White</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">#F7F7F2</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+      <span style="width: 24px; height: 24px; border-radius: 6px; background: #E9DFFF; display: inline-block; border: 1px solid #CBD5E1;"></span>
+      <div>
+        <div>Supporting Lavender</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">#E9DFFF</div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+      <span style="width: 24px; height: 24px; border-radius: 6px; background: #7545F5; display: inline-block;"></span>
+      <div>
+        <div>Secondary Purple</div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">#7545F5</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function setAppTheme(themeChoice) {
+    localStorage.setItem('nivo-theme-mode', themeChoice);
+    
+    let resolvedTheme = themeChoice;
+    if (themeChoice === 'system') {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      resolvedTheme = prefersDark ? 'dark' : 'light';
+    }
+
+    document.documentElement.setAttribute('data-theme', resolvedTheme);
+    localStorage.setItem('nivo-theme', resolvedTheme);
+
+    // Update active highlight borders on cards
+    ['dark', 'light', 'system'].forEach(m => {
+      const card = document.getElementById('theme-card-' + m);
+      if (card) {
+        if (m === themeChoice) {
+          card.style.borderColor = 'var(--nivo-lime)';
+        } else {
+          card.style.borderColor = 'var(--border-color)';
+        }
+      }
+    });
+  }
+
+  // Highlight current setting on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentMode = localStorage.getItem('nivo-theme-mode') || 'dark';
+    setAppTheme(currentMode);
+  });
+</script>
+{% endblock %}

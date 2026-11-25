@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Join NIVO" %} — NIVO{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="card auth-card">
+    
+    <div class="auth-header">
+      <div class="auth-logo">
+        {% include 'includes/logo.html' with logo_class='logo-large' show_tagline=True %}
+      </div>
+      <h1 class="auth-title">{% trans "Create Your Account" %}</h1>
+      <p class="auth-subtitle">{% trans "Your world, in sync. Share your stories with global communities." %}</p>
+    </div>
+
+    <form method="post" action="{% url 'accounts:register' %}">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Username" %}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <div class="form-error">{{ form.username.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Display Name" %}</label>
+        {{ form.display_name }}
+        {% if form.display_name.errors %}
+          <div class="form-error">{{ form.display_name.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Email Address" %}</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <div class="form-error">{{ form.email.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Password" %}</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+          <div class="form-error">{{ form.password.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">{% trans "Confirm Password" %}</label>
+        {{ form.confirm_password }}
+        {% if form.confirm_password.errors %}
+          <div class="form-error">{{ form.confirm_password.errors }}</div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.25rem;">
+        {% trans "Create Account" %}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>{% trans "Already have an account?" %} <a href="{% url 'accounts:login' %}">{% trans "Sign In" %}</a></p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

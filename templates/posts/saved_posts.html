@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Saved Posts" %} — NIVO{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 2rem auto; padding: 0 1rem;">
+  
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <a href="{% url 'posts:feed' %}" class="btn btn-secondary btn-sm" aria-label="{% trans 'Back to feed' %}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </a>
+      <h1 style="font-size: 1.35rem; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" style="color: var(--nivo-lime);">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        {% trans "Saved Collection" %}
+      </h1>
+    </div>
+    <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+      {{ posts|length }} {% trans "saved" %}
+    </span>
+  </div>
+
+  {% if posts %}
+    {% for post in posts %}
+      <article class="card post-card" id="post-{{ post.id }}">
+        
+        <div class="post-header">
+          <div class="post-author-info">
+            <a href="{% url 'accounts:profile' username=post.author.username %}">
+              {% if post.author.profile.get_avatar_url %}
+                <img src="{{ post.author.profile.get_avatar_url }}" alt="{{ post.author.username }}" class="post-author-avatar">
+              {% else %}
+                <div class="post-author-avatar avatar-initials">{{ post.author.username|first|upper }}</div>
+              {% endif %}
+            </a>
+            <div class="post-author-names">
+              <a href="{% url 'accounts:profile' username=post.author.username %}" class="post-display-name">
+                {{ post.author.profile.get_display_name }}
+              </a>
+              <span class="post-username-time">
+                <span>@{{ post.author.username }}</span>
+                <span>•</span>
+                <span>{{ post.created_at|timesince }} {% trans "ago" %}</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Unsave Action -->
+          <form action="{% url 'posts:save_toggle' post_id=post.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary btn-sm" title="{% trans 'Remove from saved' %}" style="color: var(--accent-danger);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>{% trans "Remove" %}</span>
+            </button>
+          </form>
+        </div>
+
+        {% if post.content %}
+          <div class="post-content-body">{{ post.content }}</div>
+        {% endif %}
+
+        {% if post.image %}
+          <div class="post-media-container">
+            <a href="{% url 'posts:post_detail' post_id=post.id %}">
+              <img src="{{ post.image.url }}" alt="Post image" class="post-media-img" loading="lazy">
+            </a>
+          </div>
+        {% endif %}
+
+        <div class="post-actions-bar">
+          <a href="{% url 'posts:post_detail' post_id=post.id %}" class="action-btn" style="font-size: 0.825rem; font-weight: 600; color: var(--accent-primary);">
+            {% trans "View full thread & comments" %} &rarr;
+          </a>
+        </div>
+
+      </article>
+    {% endfor %}
+  {% else %}
+    <div class="card empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1rem auto; opacity: 0.5;">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <h3 class="empty-title">{% trans "No Saved Posts Yet" %}</h3>
+      <p class="empty-text">{% trans "When you see posts you want to revisit later, tap the bookmark icon on any post in your feed." %}</p>
+      <a href="{% url 'posts:feed' %}" class="btn btn-primary btn-sm" style="margin-top: 1rem;">
+        {% trans "Explore Feed" %}
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

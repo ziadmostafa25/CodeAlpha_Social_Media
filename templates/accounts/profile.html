@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{{ profile.get_display_name }} (@{{ profile_user.username }}) — NIVO{% endblock %}
+
+{% block content %}
+<main class="main-wrapper single-column">
+  
+  <!-- Profile Header Card with Cover -->
+  <section class="card profile-header-card" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
+    
+    <!-- Cover Banner -->
+    <div class="profile-cover-banner" style="background: {% if profile.cover_image %}url('{{ profile.cover_image.url }}') center/cover{% else %}var(--nivo-purple-gradient){% endif %};">
+    </div>
+
+    <!-- Profile Inner Info Row -->
+    <div style="padding: 1.5rem 2rem; position: relative;">
+      
+      <div class="profile-top-row" style="margin-top: -65px; margin-bottom: 1rem; align-items: flex-end;">
+        
+        <!-- Large Avatar overlapping cover -->
+        <div style="position: relative;">
+          {% if profile.get_avatar_url %}
+            <img src="{{ profile.get_avatar_url }}" alt="{{ profile_user.username }}" class="profile-avatar-large" style="border: 4px solid var(--bg-card); box-shadow: var(--shadow-md);">
+          {% else %}
+            <div class="profile-avatar-large avatar-initials" style="font-size: 2.5rem; border: 4px solid var(--bg-card); box-shadow: var(--shadow-md);">
+              {{ profile_user.username|first|upper }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Action Buttons (Right) -->
+        <div style="margin-bottom: 0.5rem; display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+          {% if is_own_profile %}
+            <a href="{% url 'settings:profile' %}" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              <span>{% trans "Edit Profile" %}</span>
+            </a>
+            <a href="{% url 'settings:account' %}" class="btn btn-outline btn-sm" title="{% trans 'Settings' %}">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </a>
+          {% elif user.is_authenticated %}
+            <!-- Follow Toggle -->
+            <button type="button" 
+                    class="btn btn-sm follow-toggle-btn {% if is_following %}btn-secondary{% elif is_pending %}btn-outline{% else %}btn-primary{% endif %}" 
+                    data-username="{{ profile_user.username }}">
+              {% if is_following %}
+                {% trans "Following" %}
+              {% elif is_pending %}
+                {% trans "Requested" %}
+              {% else %}
+                {% trans "Follow" %}
+              {% endif %}
+            </button>
+
+            <!-- Direct Message Button -->
+            <a href="{% url 'chat:start_conversation' username=profile_user.username %}" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>{% trans "Message" %}</span>
+            </a>
+
+            <!-- Block / Unblock Action -->
+            {% if is_blocked_by_viewer %}
+              <form action="{% url 'accounts:unblock_user' username=profile_user.username %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline btn-sm" style="color:var(--accent-danger);">
+                  {% trans "Unblock" %}
+                </button>
+              </form>
+            {% else %}
+              <form action="{% url 'accounts:block_user' username=profile_user.username %}" method="post" style="display:inline;" onsubmit="return confirm('{% trans 'Block this user?' %}');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline btn-sm" title="{% trans 'Block user' %}" style="color:var(--text-muted);">
+                  {% trans "Block" %}
+                </button>
+              </form>
+            {% endif %}
+          {% else %}
+            <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">
+              {% trans "Follow" %}
+            </a>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <!-- User Names & Badges -->
+      <div style="margin-bottom: 0.75rem;">
+        <h1 class="profile-main-display" style="display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0.15rem 0;">
+          {{ profile.get_display_name }}
+          {% if profile.is_private %}
+            <span title="{% trans 'Private Account' %}" style="color: var(--text-muted); font-size: 0.95rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+          {% endif %}
+        </h1>
+        <div class="profile-main-handle">@{{ profile_user.username }}</div>
+      </div>
+
+      <!-- Bio -->
+      {% if profile.bio %}
+        <p class="profile-bio" style="margin-bottom: 0.85rem;">{{ profile.bio }}</p>
+      {% endif %}
+
+      <!-- Metadata (Location, Website, Date Joined) -->
+      <div class="profile-metadata-row" style="margin-bottom: 1.25rem;">
+        {% if profile.location %}
+          <div class="meta-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>{{ profile.location }}</span>
+          </div>
+        {% endif %}
+
+        {% if profile.website %}
+          <div class="meta-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary);">{{ profile.website }}</a>
+          </div>
+        {% endif %}
+
+        <div class="meta-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>{% trans "Joined" %} {{ profile_user.date_joined|date:"F Y" }}</span>
+        </div>
+      </div>
+
+      <!-- Stats Counters Bar -->
+      <div class="profile-stats-bar" style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
+        <div class="stat-item">
+          <span class="stat-number">{{ posts_count }}</span>
+          <span>{% trans "Posts" %}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ reels_count }}</span>
+          <span>{% trans "Reels" %}</span>
+        </div>
+        <a href="{% url 'accounts:followers' username=profile_user.username %}" class="stat-item">
+          <span class="stat-number" data-follower-count-for="{{ profile_user.username }}">{{ followers_count }}</span>
+          <span>{% trans "Followers" %}</span>
+        </a>
+        <a href="{% url 'accounts:following' username=profile_user.username %}" class="stat-item">
+          <span class="stat-number">{{ following_count }}</span>
+          <span>{% trans "Following" %}</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Navigation Tabs (Posts, Reels, Reposts, Saved) -->
+  <nav class="profile-nav-tabs" aria-label="{% trans 'Profile Content Tabs' %}">
+    <a href="?tab=posts" class="profile-tab-btn {% if active_tab == 'posts' %}active{% endif %}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>{% trans "Posts" %}</span>
+    </a>
+
+    <a href="?tab=reels" class="profile-tab-btn {% if active_tab == 'reels' %}active{% endif %}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+        <line x1="7" y1="2" x2="7" y2="22"></line>
+        <line x1="17" y1="2" x2="17" y2="22"></line>
+      </svg>
+      <span>{% trans "Reels" %}</span>
+    </a>
+
+    <a href="?tab=reposts" class="profile-tab-btn {% if active_tab == 'reposts' %}active{% endif %}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="17 1 21 5 17 9"></polyline>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+        <polyline points="7 23 3 19 7 15"></polyline>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+      </svg>
+      <span>{% trans "Reposts" %}</span>
+    </a>
+
+    {% if is_own_profile %}
+      <a href="?tab=saved" class="profile-tab-btn {% if active_tab == 'saved' %}active{% endif %}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>{% trans "Saved" %}</span>
+      </a>
+    {% endif %}
+  </nav>
+
+  <!-- Content Stream or Private Account Gate -->
+  {% if is_blocked %}
+    <div class="card" style="text-align: center; padding: 3.5rem 1.5rem; margin-top: 1rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--accent-danger);">{% trans "Profile Unavailable" %}</h2>
+      <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto; font-size: 0.9rem;">
+        {% trans "This account is blocked or unavailable." %}
+      </p>
+    </div>
+  {% elif not can_view_content %}
+    <!-- Locked Private Account Notice -->
+    <div class="card" style="text-align: center; padding: 3.5rem 1.5rem; margin-top: 1rem;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-hover); color: var(--text-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">{% trans "This Account is Private" %}</h2>
+      <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">
+        {% trans "Follow this account to see their posts, reels, and community interactions." %}
+      </p>
+      {% if not user.is_authenticated %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">{% trans "Log In to Request Access" %}</a>
+      {% endif %}
+    </div>
+
+  {% else %}
+
+    <!-- TAB 1: POSTS -->
+    {% if active_tab == 'posts' %}
+      {% if posts %}
+        {% for post in posts %}
+          <article class="card post-card" id="post-{{ post.id }}">
+            <div class="post-header">
+              <div class="post-author-info">
+                {% if profile.get_avatar_url %}
+                  <img src="{{ profile.get_avatar_url }}" alt="{{ profile_user.username }}" class="post-author-avatar">
+                {% else %}
+                  <div class="post-author-avatar avatar-initials">{{ profile_user.username|first|upper }}</div>
+                {% endif %}
+                <div class="post-author-names">
+                  <span class="post-display-name">{{ profile.get_display_name }}</span>
+                  <span class="post-username-time">
+                    <span>@{{ profile_user.username }}</span>
+                    <span>•</span>
+                    <span>{{ post.created_at|timesince }} {% trans "ago" %}</span>
+                  </span>
+                </div>
+              </div>
+
+              {% if is_own_profile %}
+                <div class="post-menu-wrapper">
+                  <button type="button" class="post-menu-btn" aria-label="{% trans 'Post options' %}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <circle cx="19" cy="12" r="1"></circle>
+                      <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                  </button>
+                  <div class="post-dropdown">
+                    <a href="{% url 'posts:edit_post' post_id=post.id %}" class="dropdown-item">{% trans "Edit" %}</a>
+                    <a href="{% url 'posts:delete_post' post_id=post.id %}" class="dropdown-item text-danger">{% trans "Delete" %}</a>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+
+            {% if post.content %}
+              <div class="post-content-body">{{ post.content }}</div>
+            {% endif %}
+
+            {% if post.image %}
+              <div class="post-media-container">
+                <a href="{% url 'posts:post_detail' post_id=post.id %}">
+                  <img src="{{ post.image.url }}" alt="Post image" class="post-media-img" loading="lazy">
+                </a>
+              </div>
+            {% endif %}
+
+            <div class="post-actions-bar">
+              <div class="action-buttons-group">
+                <span class="action-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                  <span>{{ post.likes.count }}</span>
+                </span>
+                <span class="action-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  <span>{{ post.comments.count }}</span>
+                </span>
+              </div>
+              <a href="{% url 'posts:post_detail' post_id=post.id %}" class="action-btn" style="font-size: 0.8rem;">
+                {% trans "View thread" %} &rarr;
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="card empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <h3 class="empty-title">{% trans "No posts yet" %}</h3>
+          <p class="empty-text">{% trans "When this user publishes stories, they will appear here." %}</p>
+        </div>
+      {% endif %}
+
+    <!-- TAB 2: REELS -->
+    {% elif active_tab == 'reels' %}
+      {% if reels %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem;">
+          {% for r in reels %}
+            <div class="card" style="padding: 0; overflow: hidden; border-radius: var(--radius-md); position: relative; aspect-ratio: 9/16; background: #000;">
+              <video src="{{ r.video_file.url }}" style="width: 100%; height: 100%; object-fit: cover;" preload="metadata" muted playsinline></video>
+              <a href="{% url 'posts:reels' %}#reel-card-{{ r.id }}" style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); display: flex; align-items: flex-end; padding: 0.75rem; color: #fff;">
+                <span style="font-size: 0.8rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  {{ r.caption|default:_("Reel") }}
+                </span>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="card empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <h3 class="empty-title">{% trans "No reels yet" %}</h3>
+          <p class="empty-text">{% trans "Short-form video stories will appear here." %}</p>
+        </div>
+      {% endif %}
+
+    <!-- TAB 3: REPOSTS -->
+    {% elif active_tab == 'reposts' %}
+      {% if reposts %}
+        {% for rp in reposts %}
+          <article class="card post-card">
+            <div class="repost-attribution-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+              <span>{{ profile.get_display_name }} {% trans "reposted" %}</span>
+            </div>
+            
+            <!-- Original Post -->
+            <div class="post-header">
+              <div class="post-author-info">
+                <a href="{% url 'accounts:profile' username=rp.post.author.username %}">
+                  <div class="post-author-avatar avatar-initials">{{ rp.post.author.username|first|upper }}</div>
+                </a>
+                <div class="post-author-names">
+                  <span class="post-display-name">{{ rp.post.author.profile.get_display_name }}</span>
+                  <span class="post-username-time">@{{ rp.post.author.username }}</span>
+                </div>
+              </div>
+            </div>
+            {% if rp.post.content %}
+              <div class="post-content-body">{{ rp.post.content }}</div>
+            {% endif %}
+            <div class="post-actions-bar">
+              <a href="{% url 'posts:post_detail' post_id=rp.post.id %}" class="action-btn" style="font-size: 0.8rem;">
+                {% trans "View thread" %} &rarr;
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="card empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <h3 class="empty-title">{% trans "No reposts yet" %}</h3>
+          <p class="empty-text">{% trans "Stories amplified by this user will appear here." %}</p>
+        </div>
+      {% endif %}
+
+    <!-- TAB 4: SAVED (Owner Only) -->
+    {% elif active_tab == 'saved' and is_own_profile %}
+      {% if saved_posts %}
+        {% for sp in saved_posts %}
+          <article class="card post-card">
+            <div class="post-header">
+              <div class="post-author-info">
+                <a href="{% url 'accounts:profile' username=sp.post.author.username %}">
+                  <div class="post-author-avatar avatar-initials">{{ sp.post.author.username|first|upper }}</div>
+                </a>
+                <div class="post-author-names">
+                  <span class="post-display-name">{{ sp.post.author.profile.get_display_name }}</span>
+                  <span class="post-username-time">@{{ sp.post.author.username }}</span>
+                </div>
+              </div>
+            </div>
+            {% if sp.post.content %}
+              <div class="post-content-body">{{ sp.post.content }}</div>
+            {% endif %}
+            <div class="post-actions-bar">
+              <a href="{% url 'posts:post_detail' post_id=sp.post.id %}" class="action-btn" style="font-size: 0.8rem;">
+                {% trans "View thread" %} &rarr;
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      {% else %}
+        <div class="card empty-state" style="text-align: center; padding: 3rem 1.5rem;">
+          <h3 class="empty-title">{% trans "No saved posts" %}</h3>
+          <p class="empty-text">{% trans "Your bookmarked collection is empty." %}</p>
+        </div>
+      {% endif %}
+
+    {% endif %}
+
+  {% endif %}
+
+</main>
+{% endblock %}

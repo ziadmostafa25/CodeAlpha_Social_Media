@@ -1,0 +1,42 @@
+{% extends 'settings/base_settings.html' %}
+{% load i18n %}
+
+{% block settings_title %}{% trans "Delete Account" %}{% endblock %}
+
+{% block settings_content %}
+<h1 style="color: var(--accent-danger);">{% trans "Delete Account" %}</h1>
+<p class="settings-panel-desc">{% trans "Permanently remove your account, profile, posts, comments, reels, and direct messages." %}</p>
+
+<div class="danger-zone-box">
+  <div style="display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1.25rem;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-danger); flex-shrink: 0;">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+    <div>
+      <h3 style="font-size: 1rem; font-weight: 800; color: var(--accent-danger); margin-bottom: 0.25rem;">
+        {% trans "Warning: This action is permanent and irreversible." %}
+      </h3>
+      <p style="font-size: 0.825rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+        {% trans "Once your account is deleted, all your content, followers, liked posts, and messaging history will be permanently wiped from NIVO servers. There is no recovery." %}
+      </p>
+    </div>
+  </div>
+
+  <form method="post" action="{% url 'settings:delete_account' %}" onsubmit="return confirm('{% trans 'Are you absolutely sure you want to permanently delete your NIVO account?' %}');">
+    {% csrf_token %}
+
+    <div class="settings-form-row">
+      <label for="id_confirm_password" style="font-weight: 700; font-size: 0.85rem;">
+        {% trans "Enter your current password to confirm deletion:" %}
+      </label>
+      <input type="password" name="password" id="id_confirm_password" class="search-input" style="width: 100%; max-width: 380px;" required placeholder="{% trans 'Current Password' %}">
+    </div>
+
+    <button type="submit" class="btn btn-danger">
+      {% trans "Permanently Delete My NIVO Account" %}
+    </button>
+  </form>
+</div>
+{% endblock %}
